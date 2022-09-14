@@ -1,13 +1,33 @@
-# Sample Hardhat Project
+#LAN
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, and a script that deploys that contract.
 
-Try running some of the following tasks:
+npm install --legacy-peer-deps
+
+
+
+
 
 ```shell
-npx hardhat help
-npx hardhat test
-GAS_REPORT=true npx hardhat test
+ 
 npx hardhat node
-npx hardhat run scripts/deploy.js
+
+  or 
+
+npx hardhat node --fork https://polygon-mainnet.g.alchemy.com/v2/EIEI4ZzvpwpQ3TFIef4ZwTyNc2oc7aPL
+    -fork poly main net with my alchemy api key
+(actually instead of this make a custom script which calls npm run polygonfork 
+and that script will get key from dotenv)
+
+
+npx hardhat run scripts/deploy.js --network localhost
+
+
+
+
+
+
 ```
+
+
+in .dotenv put
+LAN_ADDRESS, SimpleNFT_ADDRESS , ALCHEMY_API
