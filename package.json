@@ -1,3 +1,4 @@
+
 {
   "name": "lan-final",
   "version": "0.1.0",
@@ -29,7 +30,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "mainnet_fork": "npx hardhat node --fork https://polygon-mainnet.g.alchemy.com/v2/EIEI4ZzvpwpQ3TFIef4ZwTyNc2oc7aPL "
   },
   "eslintConfig": {
     "extends": "react-app"
