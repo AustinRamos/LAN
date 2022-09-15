@@ -48,7 +48,11 @@ import DashboardHeader from './components/DashboardHeader'
 
 import "rari-components/assets/fonts/avenir-next/avenir.css";
 import CreateLendingPool from './components/CreateLendingPool';
-require('dotenv').config()
+import { LAN_ADDRESS, NFT_ADDRESS, USDC_ADDRESS } from './constants'
+
+
+
+
 
 let contract;
 let refresh;
@@ -136,6 +140,27 @@ function App() {
     });
   };
 
+  //LISTEN FOR EVENT to notify user of his pool being created! try to make a nice loading experience..
+
+  // useEffect(()=>{
+  //   filter = {
+  //     address: LAN_ADDRESS,
+  //     topics: [
+  //         // the name of the event, parnetheses containing the data type of each event, no spaces
+  //         utils.id("newPool(count, _collectionAddress, _nftId);")
+  //     ]
+  // }
+  // provider.on(filter, () => {
+  //     // do whatever you want here
+  //     // I'm pretty sure this returns a promise, so don't forget to resolve it
+      
+  // })
+  
+  // // })
+  // useEffect(()=>{
+  //   const contract = new ethers.Contract(LAN_ADDRESS, LAN.abi, provider.)
+         
+  // })
 
   const onConnect = async () => {
     clearTimeout(refresh);
