@@ -53,13 +53,12 @@ import { useEffect, useState } from 'react'
    //process.env.USDC_Address
 const nft_address="0xE8aB4B54E9209522D387343D50e37b7a540056D1"
 
-  export default function Pools({provider}) {
+   export default function Pools() {
 
 
   
- console.log("PROVIDER: " , provider)
+//  console.log("PROVIDER: " , provider)
 const [count,setCount] = useState(0)
-
 useEffect(()=>{
 
 //get count of auctions: 
@@ -79,12 +78,13 @@ const signer = provider.getSigner()
 
 //contract.connect
     const transaction = contract.connect(signer).count().then(resp=>{
-      console.log("COUNT GOTTEN -> ", resp.toNumber())
-      setCount(resp.toNumber())
+      //console.log("COUNT GOTTEN -> ", resp.toNumber())
+setCount(resp.toNumber())
   })
-})
+
    // await transaction.wait().then()
 
+})
 
     return(<div>
     COUNT: 

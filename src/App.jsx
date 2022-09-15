@@ -29,21 +29,12 @@ import {
   TableCaption,
   TableContainer,
 } from '@chakra-ui/react'
-import { Link, Route, Switch, useLocation } from "react-router-dom";
-//  <Menu style={{ textAlign: "center", marginTop: 40 }} selectedKeys={[location.pathname]} mode="horizontal">
-//         <Menu.Item key="/">
-//           <Link to="/">App Home</Link>
-//         </Menu.Item>
-//         <Menu.Item key="/exampleui">
-//           <Link to="/exampleui">ExampleUI</Link>
-//         </Menu.Item>
-        
-//       </Menu>
 
-//import { Card } from "@rari-components/";
+import Dashboard from './components/Dashboard'
+import { Link, Route, Switch, useLocation } from "react-router-dom";
+
 
 import Pools from './components/Pools'
-
 import { InfoIcon } from '@chakra-ui/icons';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Logo } from './Logo';
@@ -119,14 +110,13 @@ function App() {
       setProvider(_provider)
     } else if (window.ethereum) {
 
-      setProvider(window.web3.currentProvider)
-    } else {
+_provider=window.ethereum    } else {
       console.log(
         'Non-Ethereum browser detected. You should consider trying MetaMask!'
       );
       window.open('https://metamask.io/');
     }
-    return provider;
+    return _provider;
   };
 
   const getPrice = async () => {
@@ -378,129 +368,7 @@ function App() {
 <Switch>
         <Route exact path="/">
           {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
-          
-      Your Supplies:
- <Flex >
-
-
-            {/* <TableContainer > */}
-     
-  <Table sx="sm" variant='simple'>
-    {/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
-    <Thead>
-      <Tr>
-        <Th>Assets</Th>
-        <Th>Balance</Th>
-        <Th isNumeric>APY</Th>
-      </Tr>
-    </Thead>
-    <Tbody>
-      <Tr>
-        <Td>ETH</Td>
-        <Td>12.4</Td>
-        <Td isNumeric>69%</Td>
-        <Flex>
-        <Td><Button>Supply</Button></Td>
-        <Td><Button>Withdraw</Button></Td>
-        </Flex>
-
-      </Tr>
-      <Tr>
-        <Td>USDC</Td>
-        <Td> 10000</Td>
-        <Td isNumeric>420%</Td>
-        <Flex>
-        <Td><Button>Supply</Button></Td>
-        <Td><Button>Withdraw</Button></Td>
-        </Flex>
-      </Tr>
-     
-    </Tbody>
-    {/* <Tfoot>
-      <Tr>
-        <Th>To convert</Th>
-        <Th>into</Th>
-        <Th isNumeric>multiply by</Th>
-      </Tr>
-    </Tfoot> */}
-  </Table>
-  
-{/* // </TableContainer> */}
-</Flex>
-
-
-Assets to Supply:
-<Flex>
-
-
-<Table variant='simple'>
-{/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
-<Thead>
-<Tr>
-<Th>Assets</Th>
-<Th>Balance</Th>
-
-</Tr>
-</Thead>
-<Tbody>
-<Tr>
-<Td>ETH</Td>
-<Td>12.4</Td>
-
-<Flex>
-<Td><Button>Supply</Button></Td>
-
-</Flex>
-
-</Tr>
-<Tr>
-<Td>USDC</Td>
-<Td> 10000</Td>
-
-<Flex>
-<Td><Button>Supply</Button></Td>
-</Flex>
-</Tr>
-
-</Tbody>
-{/* <Tfoot>
-<Tr>
-<Th>To convert</Th>
-<Th>into</Th>
-<Th isNumeric>multiply by</Th>
-</Tr>
-</Tfoot> */}
-</Table>
-
-</Flex>
-
-
-
-Your Auctions:
-<Flex>
-
-<TableContainer>
-<Table variant='simple'>
-{/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
-<Thead>
-<Tr>
-<Th>Auction</Th>
-<Th>Borrowed Asset</Th>
-<Th> Bid </Th>
-<Th> Accrued Interest </Th>
-<Th> Apr </Th>
-<Th> Expiry Status </Th>
-
-
-
-</Tr>
-</Thead>
-
-
-</Table>
-</TableContainer>
-
-</Flex>
+          <Dashboard></Dashboard>
   </Route>
 
 
@@ -511,7 +379,7 @@ Your Auctions:
     <CreateLendingPool ></CreateLendingPool>
   </Route>
   <Route exact path="/Pools">
-  <Pools provider = {provider}></Pools>
+  <Pools ></Pools>
 </Route>
 
 </Container>
