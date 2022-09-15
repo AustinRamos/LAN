@@ -42,6 +42,8 @@ import { Link, Route, Switch, useLocation } from "react-router-dom";
 
 //import { Card } from "@rari-components/";
 
+import Pools from './components/Pools'
+
 import { InfoIcon } from '@chakra-ui/icons';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Logo } from './Logo';
@@ -103,17 +105,21 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const [provider,setProvider] = useState()
+
   useEffect(() => {
     if (isConnected) onConnect();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshCounter]);
 
   const detectCurrentProvider = () => {
-    let provider;
+    let _provider;
     if (window.ethereum) {
-      provider = window.ethereum;
-    } else if (window.web3) {
-      provider = window.web3.currentProvider;
+      _provider = window.ethereum;
+      setProvider(_provider)
+    } else if (window.ethereum) {
+
+      setProvider(window.web3.currentProvider)
     } else {
       console.log(
         'Non-Ethereum browser detected. You should consider trying MetaMask!'
@@ -154,6 +160,7 @@ function App() {
     }, 25000);
     try {
       const currentProvider = detectCurrentProvider();
+      setProvider(currentProvider)
       if (currentProvider) {
         if (currentProvider !== window.ethereum) {
           console.log(
@@ -323,6 +330,7 @@ function App() {
             </Button>
 
                 </Link>
+                <Link to="/Pools" key="/Pools">
             <Button
               isLoading={false}
               // isDisabled={
@@ -341,6 +349,7 @@ function App() {
             >
               Browse Existing Pools
             </Button>
+            </Link>
             <Button
               isLoading={false}
               // isDisabled={
@@ -493,12 +502,17 @@ Your Auctions:
 
 </Flex>
   </Route>
-  
+
+
+  {/* DOES THIS NEED TO WRAP ALL THE ROUTES? */}
   </Switch>
 
   <Route exact path="/CreatePool">
-    <CreateLendingPool></CreateLendingPool>
+    <CreateLendingPool ></CreateLendingPool>
   </Route>
+  <Route exact path="/Pools">
+  <Pools provider = {provider}></Pools>
+</Route>
 
 </Container>
 

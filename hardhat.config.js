@@ -8,11 +8,11 @@ module.exports = {
   },
   networks: {
     hardhat: {
-      chainId: 1337
+      chainId: 31337
     },
     forking: {
      // url: "https://eth-mainnet.alchemyapi.io/v2/<key>",
-     url:"https://polygon-mainnet.g.alchemy.com/v2/EIEI4ZzvpwpQ3TFIef4ZwTyNc2oc7aPL"
+     url:`https://polygon-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API}`
       }
   }
 };

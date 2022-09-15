@@ -30,6 +30,7 @@ async function main() {
   await lan.deployed();
 
   await nftFactory.deployed();
+
 const address = await owner.getAddress()
   console.log("owner: " , address);
 
@@ -42,6 +43,7 @@ const address = await owner.getAddress()
   //now need to send nft to dotenv of accnt 10
   const res = await nftFactory.connect(owner).createToken("test");
 
+  
 }
 
 // We recommend this pattern to be able to use async/await everywhere

@@ -45,14 +45,16 @@ contract LAN{
     /// @param _numBid, the number of bids, keep track of the latest bid
     /// @param _liquidatable, if the loan can be liquidatable
     /// @param _whitelisted, if the loan is whitelisted to only approved bidders
+
+
     struct Loan {
-        address owner;
-        address token;
-        address operator;
-        address oracleAddress;        
-        address collectionAddress;
+        // address owner;
+        // address token;
+        // address operator;
+        // address oracleAddress;        
+        // address collectionAddress;
         uint256 apr;
-        uint256 nftId;
+       // uint256 nftId;
         uint256 startTime;
         uint256 endTime;
         uint256 numBids;
@@ -86,40 +88,35 @@ contract LAN{
     /// @notice Only Owner and Operator (if set) can control this position
     /// @param _poolId the ID for the pool
     modifier onlyOwner(uint256 _poolId){
-        require((loans[_poolId].owner == msg.sender)
-        ||(loans[_poolId].operator == msg.sender), "LAN: not owner");
+       // require((loans[_poolId].owner == msg.sender)
+       // ||(loans[_poolId].operator == msg.sender), "LAN: not owner");
         _;
     }
 
-    /// @notice Launching the auction
-    /// @param _operator, EOA or normal Contract. Can act on behalf of owner to rollover a loan. Set address(0) if not used
-    /// @param _token, base borrowable asset, only one per loan.
-    /// @param _oracleAddress, address for the collection address asset. Default is ChainlinkOracle.sol Requires liquidatable = true
-    /// @param _collectionAddress, address for the Wrapper NFT, although this could be literally any NFT
-    /// @param _nftId, nftId
-    /// @param _startTime, the startTime of the loan in blocks
-    /// @param _endTime, the endTime of the loan in blocks
-    /// @param _liquidatable, if the loan can be liquidatable
-    /// @param _whitelisted, if the loan is whitelisted to only approved bidders
+  function test (uint256 te) public returns (uint) {
+      return te+5;
+  }
     function launch(
-        address _operator, 
-        address _token,  
-        address _oracleAddress,
-        address _collectionAddress,
-        uint256 _nftId, 
+        // address _operator, 
+        // address _token,  
+        // address _oracleAddress,
+        // address _collectionAddress,
+        // //should be address no? or oohhh is i see. this is the nftId of the collection address
+        // //as in a uint to represent what collection address minting it is?
+        // uint256 _nftId, 
         uint256 _startTime, 
         uint256 _endTime, 
         bool _liquidatable,
         bool _whitelisted) public {
-        require(_startTime >= block.timestamp, "LAN: start time in past");
+        //require(_startTime >= block.timestamp, "LAN: start time in past");
         require(_endTime > _startTime, "LAN: start after end");
         loans[count] = Loan({
-            owner: IERC721(_collectionAddress).ownerOf(_nftId),
-            operator: _operator,
-            token: _token,
-            oracleAddress: _oracleAddress,
-            collectionAddress: _collectionAddress,
-            nftId: _nftId,
+            // owner: IERC721(_collectionAddress).ownerOf(_nftId),
+            // operator: _operator,
+            // token: _token,
+            // oracleAddress: _oracleAddress,
+            // collectionAddress: _collectionAddress,
+            // nftId: _nftId,
             startTime: _startTime,
             endTime: _endTime,
             apr: 0,
@@ -128,7 +125,7 @@ contract LAN{
             whitelisted: _whitelisted
         });
         bids[count][0].bidTime = block.timestamp;
-        emit newPool(count, _collectionAddress, _nftId);
+       // emit newPool(count, _collectionAddress, _nftId);
         count++;
     }
     
@@ -210,11 +207,11 @@ contract LAN{
         Loan memory loan = loans[_poolId];
         Bid memory latestBid = bids[_poolId][loan.numBids];
 
-        IERC20(loan.token).transferFrom(msg.sender, address(this), _amount);
+       // IERC20(loan.token).transferFrom(msg.sender, address(this), _amount);
         if(_amount + userPoolReserve[_poolId] >= _calculateLoanValue(_poolId)) {
             // End loan
-            IERC721 NFT = IERC721(loan.collectionAddress);
-            NFT.safeTransferFrom(address(this), latestBid.user, loan.nftId);
+           // IERC721 NFT = IERC721(loan.collectionAddress);
+           // NFT.safeTransferFrom(address(this), latestBid.user, loan.nftId);
             emit loanEnded(_poolId);
             delete loan;
         }
@@ -241,10 +238,10 @@ contract LAN{
     /// @param latestBid the latest bid
     /// @param _poolId pool Id
     function _liquidate(Loan calldata loan, Bid calldata latestBid, uint256 _poolId) internal returns (bool){
-        uint256 currentPrice = ILiquidationOracle(loan.oracleAddress).getUnderlyingPrice(loan.collectionAddress)/ILiquidationOracle(loan.oracleAddress).getUnderlyingPrice(loan.token);
-        if ((latestBid.bidAmount - userPoolReserve[_poolId])/(latestBid.ltv*currentPrice) >= 1){
-            return false;
-        }
+        //uint256 currentPrice = ILiquidationOracle(loan.oracleAddress).getUnderlyingPrice(loan.collectionAddress)/ILiquidationOracle(loan.oracleAddress).getUnderlyingPrice(loan.token);
+        // if ((latestBid.bidAmount - userPoolReserve[_poolId])/(latestBid.ltv*currentPrice) >= 1){
+        //     return false;
+        // }
         return true;
     }
 
@@ -254,8 +251,8 @@ contract LAN{
         Loan memory loan = loans[_poolId];
         Bid memory latestBid = bids[_poolId][loan.numBids];
         // transfer NFT
-        IERC721 NFT = IERC721(loan.collectionAddress);
-        NFT.safeTransferFrom(address(this), latestBid.user, loan.nftId);
+       // IERC721 NFT = IERC721(loan.collectionAddress);
+        //NFT.safeTransferFrom(address(this), latestBid.user, loan.nftId);
         emit loanEnded(_poolId);
         delete loan;
     }

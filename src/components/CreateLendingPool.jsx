@@ -1,3 +1,4 @@
+
 import {
     Flex,
     Box,
@@ -25,6 +26,7 @@ import {
     VStack,
     FormHelperText
   } from '@chakra-ui/react';
+
   // import Blockies from 'react-blockies';
 
   import { useForm } from "react-hook-form";
@@ -39,13 +41,17 @@ import {
   
 //   import LogoBsc from '../assets/bsc.svg';
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
    import Logo from '../assets/logo.png';
    import MetaLogo from '../assets/metamask.svg';
-   const LANAddress = "0x1EC66e52D13c18809F023948f1ae053025D2c969"
+   require('dotenv').config()
+   const LANAddress = "0x4417E9B86Be5d09331eF8B5a98Af4589228F476E"
+   //process.env.LAN_ADDRESS
 
    const USDC_Address="0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
+   //process.env.USDC_Address
+const nft_address="0xE8aB4B54E9209522D387343D50e37b7a540056D1"
 
   export default function CreateLendingPool(props) {
 
@@ -55,37 +61,70 @@ import { useState } from 'react'
     async function requestAccount() {
         await window.ethereum.request({ method: 'eth_requestAccounts' });
       }
+      const [provider, setProvider] = useState();
+      useEffect(()=>{
+      let provider;
+    if (window.ethereum) {
+      provider = window.ethereum;
+      setProvider(provider)
+    } else if (window.web3) {
+      provider = window.web3.currentProvider;
+      setProvider(provider)
 
-    //   function launch(
-    //     address _operator, 
-    //     address _token, 
-    //     address _collectionAddress, 
-    //     address _oracleAddress,
-    //     uint256 _nftId, 
-    //     uint256 _startTime, 
-    //     uint256 _endTime, 
-    //     bool _liquidatable,
-    //     bool _whitelisted)
+    } else {
+      console.log(
+        'Non-Ethereum browser detected. You should consider trying MetaMask!'
+      );
+      window.open('https://metamask.io/');
+    }
+})
+
+
+
+       /// @notice Launching the auction
+    /// @param _operator, EOA or normal Contract. Can act on behalf of owner to rollover a loan. Set address(0) if not used
+    /// @param _token, base borrowable asset, only one per loan.
+    /// @param _oracleAddress, address for the collection address asset. Default is ChainlinkOracle.sol Requires liquidatable = true
+    /// @param _collectionAddress, address for the Wrapper NFT, although this could be literally any NFT
+    /// @param _nftId, nftId
+    /// @param _startTime, the startTime of the loan in blocks
+    /// @param _endTime, the endTime of the loan in blocks
+    /// @param _liquidatable, if the loan can be liquidatable
+    /// @param _whitelisted, if the loan is whitelisted to only approved bidders
 
       async function createPool() {
        //if (!greeting) return
         if (typeof window.ethereum !== 'undefined') {
           await requestAccount()
           const provider = new ethers.providers.Web3Provider(window.ethereum);
-          const signer = provider.getSigner()
+       // const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+// Prom//pt user for account connections
+//await provider.send("eth_requestAccounts", []);
+const signer = provider.getSigner()
           const contract = new ethers.Contract(LANAddress, LAN.abi, signer)
-          
-          const transaction = await contract.launch(
-            ethers.constants.AddressZero ,
-              USDC_Address,
-              ethers.constants.AddressZero, //address of nft wrapped?
-              ethers.constants.AddressZero, //oracle address
-              ethers.constants.AddressZero, //nft_id 
-              Date.now(),
-              Date.now()+600000,
+
+          console.log("PROVIDER: " , provider)
+          console.log("SIGNER: " , signer)
+          // dumb way to get current timestamp?
+          const block_num=  await provider.getBlockNumber()
+          const timestamp = (await provider.getBlock(block_num)).timestamp;
+console.log("*********************timestamp: " , timestamp)
+const start_time=timestamp+200;
+console.log("START TIME: " , new Date(start_time))
+
+//contract.connect
+          const transaction = await contract.connect(signer).launch(
+            // ethers.constants.AddressZero ,
+            // ethers.getAddress(USDC_Address),
+            // ethers.getAddress(nft_address), //address of nft wrapped?
+            //   ethers.constants.AddressZero, //oracle address
+            //   5, //nft_id 
+              timestamp+600,
+              timestamp+60000,
               false,
               false
           )
+//const transaction = await contract.test(5)
 
           await transaction.wait()
           //fetchGreeting()
