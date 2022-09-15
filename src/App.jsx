@@ -43,14 +43,11 @@ import { useState, useEffect } from 'react';
 import Web3 from 'web3';
 import Contract from './assets/contract-info';
 import Network from './assets/network-info';
-//import CreateLendingPool from './components/CreateLendingPool'
 
 import DashboardHeader from './components/DashboardHeader'
 
 import "rari-components/assets/fonts/avenir-next/avenir.css";
 import CreateLendingPool from './components/CreateLendingPool';
-
-//import "rari-components";
 
 
 let contract;
@@ -65,7 +62,7 @@ function App() {
     onOpen: onInfo,
     onClose: onInfoClose,
   } = useDisclosure();
-  
+
   const [isConnected, setIsConnected] = useState(false);
   const [userInfo, setUserInfo] = useState({
     balance: 0,
@@ -82,8 +79,6 @@ function App() {
 
   const formatVal = val => Math.trunc(val * 100000) / 100000;
 
-
-
   useEffect(() => {
     function checkConnectedWallet() {
       const connected = JSON.parse(localStorage.getItem('isConnected'));
@@ -93,14 +88,12 @@ function App() {
       }
     }
     checkConnectedWallet();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const [provider,setProvider] = useState()
+  const [provider, setProvider] = useState()
 
   useEffect(() => {
     if (isConnected) onConnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refreshCounter]);
 
   const detectCurrentProvider = () => {
@@ -110,7 +103,8 @@ function App() {
       setProvider(_provider)
     } else if (window.ethereum) {
 
-_provider=window.ethereum    } else {
+      _provider = window.ethereum
+    } else {
       console.log(
         'Non-Ethereum browser detected. You should consider trying MetaMask!'
       );
@@ -230,195 +224,57 @@ _provider=window.ethereum    } else {
   };
 
   return (
-   
-      <Flex
-      
+
+    <Flex
+
       align={'center'}
       justify={'center'}
       bg={useColorModeValue('gray.70', 'gray.5800')}
     >
-    
+
       <Box textAlign="center" minW={'100vw'} overflowY="auto">
-      
+
         <Grid h="5vh">
-        
-      {/* <TitleBar userInfo={userInfo} onConnect={onConnect}>
 
-      </TitleBar> */}
-      <TitleBar userInfo={userInfo} onConnect={onConnect}>
-      
-</TitleBar>
+          
+          <TitleBar userInfo={userInfo} onConnect={onConnect}>
 
-</Grid>
+          </TitleBar>
+
+        </Grid>
 
 
-<Container>
+        <Container>
 
-{/* <DashboardHeader></DashboardHeader> */}
+          <DashboardHeader></DashboardHeader>
 
-<Center >
-<Grid h="17vh">
-<Stack spacing={8} direction='row' align='center'>
-<Link to="/borrow" key="/borrow">
-<Button
-              isLoading={false}
-              // isDisabled={
-              //   !props.isConnected ||
-              //   Number(props.value) > info.balance ||
-              //   Number(props.value) === 0
-              // }
-              //onClick={onStake}
-              spinnerPlacement="start"
-              loadingText="Stake"
-              bg={'blue.400'}
-              color={'white'}
-              _hover={{
-                bg: 'blue.500',
-              }}
-            >
-              Borrow
-            </Button>
-            </Link>
-
-            <Button
-              isLoading={false}
-              // isDisabled={
-              //   !props.isConnected ||
-              //   Number(props.value) > info.balance ||
-              //   Number(props.value) === 0
-              // }
-              //onClick={onStake}
-              spinnerPlacement="start"
-              loadingText="Stake"
-              bg={'blue.400'}
-              color={'white'}
-              _hover={{
-                bg: 'blue.500',
-              }}
-            >
-              Supply
-            </Button>
-
-            <Link to="/CreatePool" key="/CreatePool">
-            <Button
-              isLoading={false}
-              // isDisabled={
-              //   !props.isConnected ||
-              //   Number(props.value) > info.balance ||
-              //   Number(props.value) === 0
-              // }
-              //onClick={onStake}
-              spinnerPlacement="start"
-              loadingText="Stake"
-              bg={'blue.400'}
-              color={'white'}
-              _hover={{
-                bg: 'blue.500',
-              }}
-            >
-              Create Lending Pool
-            </Button>
-
-                </Link>
-                <Link to="/Pools" key="/Pools">
-            <Button
-              isLoading={false}
-              // isDisabled={
-              //   !props.isConnected ||
-              //   Number(props.value) > info.balance ||
-              //   Number(props.value) === 0
-              // }
-              //onClick={onStake}
-              spinnerPlacement="start"
-              loadingText="Stake"
-              bg={'blue.400'}
-              color={'white'}
-              _hover={{
-                bg: 'blue.500',
-              }}
-            >
-              Browse Existing Pools
-            </Button>
-            </Link>
-            <Button
-              isLoading={false}
-              // isDisabled={
-              //   !props.isConnected ||
-              //   Number(props.value) > info.balance ||
-              //   Number(props.value) === 0
-              // }
-              //onClick={onStake}
-              spinnerPlacement="start"
-              loadingText="Stake"
-              bg={'blue.400'}
-              color={'white'}
-              _hover={{
-                bg: 'blue.500',
-              }}
-            >
-              View Auctions
-            </Button>
-            </Stack>
-            </Grid>
-            </Center>
+          <Switch>
+            <Route exact path="/">
+              <Dashboard></Dashboard>
+            </Route>
 
 
-{/* //******************** */ }
+            {/* DOES THIS NEED TO WRAP ALL THE ROUTES? */}
+          </Switch>
 
-<Switch>
-        <Route exact path="/">
-          {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
-          <Dashboard></Dashboard>
-  </Route>
+          <Route exact path="/CreatePool">
+            <CreateLendingPool ></CreateLendingPool>
+          </Route>
+          <Route exact path="/Pools">
+            <Pools ></Pools>
+          </Route>
 
-
-  {/* DOES THIS NEED TO WRAP ALL THE ROUTES? */}
-  </Switch>
-
-  <Route exact path="/CreatePool">
-    <CreateLendingPool ></CreateLendingPool>
-  </Route>
-  <Route exact path="/Pools">
-  <Pools ></Pools>
-</Route>
-
-</Container>
+        </Container>
 
 
-      <Stack spacing={8} mx={'auto'} w={['90vw', 450, 550]} py={12} px={6}>
-      
-            <Stack pt={50} align={'center'}>
-            
-              {/* <Heading fontSize={'4xl'}>P2P and P2Pool lending</Heading>
-              <Text
-                fontSize={'lg'}
-                color={useColorModeValue('gray.500', 'gray.600')}
-              >
-                <Link onClick={onInfo}>stake / earn / enjoy</Link>{' '}
-                <Link onClick={onInfo}>
-                  <InfoIcon /> </Link>
-              </Text> */}
-            </Stack>
+        <Stack spacing={8} mx={'auto'} w={['90vw', 450, 550]} py={12} px={6}>
 
+          <Stack pt={50} align={'center'}>
+          </Stack>
 
-
-            </Stack>
-        {/* <img src={logo} className="App-logo" alt="logo" />
-        <p>
-         
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a> */}
-  
-     
-        </Box>
-        </Flex>
+        </Stack>
+      </Box>
+    </Flex>
 
   );
 }
