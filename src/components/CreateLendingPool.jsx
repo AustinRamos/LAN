@@ -44,19 +44,22 @@ import { useEffect, useState } from 'react'
 
    import Logo from '../assets/logo.png';
    import MetaLogo from '../assets/metamask.svg';
-   require('dotenv').config()
-   const LANAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+   //require('dotenv').config()
+
+   import { LAN_ADDRESS,NFT_ADDRESS,USDC_ADDRESS } from '../constants'  
+   //const LANAddress = Constants.LANAddress
    //process.env.LAN_ADDRESS
 
-   const USDC_Address="0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
-   //process.env.USDC_Address
-const nft_address="0xE8aB4B54E9209522D387343D50e37b7a540056D1"
+   
 
   export default function CreateLendingPool(props) {
 
+
+    //console.log("PROCESSENV: ", process.env)
+
     const { register, handleSubmit, formState: { errors } } = useForm();
 
-    console.log("LAN ABI: ", LAN.abi)
+    //console.log("LAN ABI: ", LAN.abi)
     async function requestAccount() {
         await window.ethereum.request({ method: 'eth_requestAccounts' });
       }
@@ -100,14 +103,10 @@ const nft_address="0xE8aB4B54E9209522D387343D50e37b7a540056D1"
 // Prom//pt user for account connections
 //await provider.send("eth_requestAccounts", []);
 const signer = provider.getSigner()
-          const contract = new ethers.Contract(LANAddress, LAN.abi, signer)
+          const contract = new ethers.Contract(LAN_ADDRESS, LAN.abi, signer)
 
           console.log("PROVIDER: " , provider)
           console.log("SIGNER: " , signer)
-          // dumb way to get current timestamp?
-          //const latest_block = ethers.provider.getBlock("latest")
-          //const block_num=  await provider.getBlockNumber()
-          //console.log("blocknum**: " , block_num)
           const timestamp = (await provider.getBlock("latest")).timestamp;
 console.log("*********************timestamp: " , timestamp)
 
@@ -115,15 +114,19 @@ console.log("*********************timestamp: " , timestamp)
 const start_time=new Date(timestamp*1000).toLocaleString()
 console.log("START TIME: " , start_time )
 
+//will need a date thing for that
+const new_start_time=Math.round(Date.now() / 1000)
+
+console.log("NEW START TIME" , new_start_time )
 //contract.connect
           const transaction = await contract.connect(signer).launch(
-            // ethers.constants.AddressZero ,
-            // ethers.getAddress(USDC_Address),
-            // ethers.getAddress(nft_address), //address of nft wrapped?
-            //   ethers.constants.AddressZero, //oracle address
-            //   5, //nft_id 
-              timestamp+600,
-              timestamp+60000,
+            ethers.constants.AddressZero ,
+           USDC_ADDRESS,
+            NFT_ADDRESS, //address of nft wrapped?
+              ethers.constants.AddressZero, //oracle address
+              5, //nft_id 
+              new_start_time+600,
+              new_start_time+60000,
               false,
               false
           )

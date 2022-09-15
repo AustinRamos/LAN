@@ -48,13 +48,13 @@ contract LAN{
 
 
     struct Loan {
-        // address owner;
-        // address token;
-        // address operator;
-        // address oracleAddress;        
-        // address collectionAddress;
+        address owner;
+        address token;
+        address operator;
+        address oracleAddress;        
+        address collectionAddress;
         uint256 apr;
-       // uint256 nftId;
+        uint256 nftId;
         uint256 startTime;
         uint256 endTime;
         uint256 numBids;
@@ -93,30 +93,27 @@ contract LAN{
         _;
     }
 
-  function test (uint256 te) public returns (uint) {
-      return te+5;
-  }
     function launch(
-        // address _operator, 
-        // address _token,  
-        // address _oracleAddress,
-        // address _collectionAddress,
-        // //should be address no? or oohhh is i see. this is the nftId of the collection address
-        // //as in a uint to represent what collection address minting it is?
-        // uint256 _nftId, 
+        address _operator, 
+        address _token,  
+        address _oracleAddress,
+        address _collectionAddress,
+        //should be address no? or oohhh is i see. this is the nftId of the collection address
+        //as in a uint to represent what collection address minting it is?
+        uint256 _nftId, 
         uint256 _startTime, 
         uint256 _endTime, 
         bool _liquidatable,
         bool _whitelisted) public {
-        //require(_startTime >= block.timestamp, "LAN: start time in past");
+        require(_startTime >= block.timestamp, "LAN: start time in past");
         require(_endTime > _startTime, "LAN: start after end");
         loans[count] = Loan({
-            // owner: IERC721(_collectionAddress).ownerOf(_nftId),
-            // operator: _operator,
-            // token: _token,
-            // oracleAddress: _oracleAddress,
-            // collectionAddress: _collectionAddress,
-            // nftId: _nftId,
+           owner: msg.sender,//IERC721(_collectionAddress).ownerOf(_nftId),
+            operator: _operator,
+            token: _token,
+            oracleAddress: _oracleAddress,
+            collectionAddress: _collectionAddress,
+            nftId: _nftId,
             startTime: _startTime,
             endTime: _endTime,
             apr: 0,

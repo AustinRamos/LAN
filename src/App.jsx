@@ -48,7 +48,7 @@ import DashboardHeader from './components/DashboardHeader'
 
 import "rari-components/assets/fonts/avenir-next/avenir.css";
 import CreateLendingPool from './components/CreateLendingPool';
-
+require('dotenv').config()
 
 let contract;
 let refresh;

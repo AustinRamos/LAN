@@ -1,4 +1,3 @@
-
 import {
     Flex,
     Box,
@@ -45,13 +44,13 @@ import { useEffect, useState } from 'react'
 
    import Logo from '../assets/logo.png';
    import MetaLogo from '../assets/metamask.svg';
-   require('dotenv').config()
-   const LANAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+
+   import { LAN_ADDRESS,NFT_ADDRESS,USDC_ADDRESS } from '../constants'  
+
+  
    //process.env.LAN_ADDRESS
 
-   const USDC_Address="0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
-   //process.env.USDC_Address
-const nft_address="0xE8aB4B54E9209522D387343D50e37b7a540056D1"
+
 
    export default function Pools() {
 
@@ -69,7 +68,7 @@ useEffect(()=>{
 // Prom//pt user for account connections
 //await provider.send("eth_requestAccounts", []);
 const signer = provider.getSigner()
-    const contract = new ethers.Contract(LANAddress, LAN.abi, signer)
+    const contract = new ethers.Contract(LAN_ADDRESS, LAN.abi, signer)
 
     console.log("PROVIDER: " , provider)
     console.log("SIGNER: " , signer)
