@@ -46,7 +46,7 @@ import { useEffect, useState } from 'react'
    import Logo from '../assets/logo.png';
    import MetaLogo from '../assets/metamask.svg';
    require('dotenv').config()
-   const LANAddress = "0x4417E9B86Be5d09331eF8B5a98Af4589228F476E"
+   const LANAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
    //process.env.LAN_ADDRESS
 
    const USDC_Address="0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"

@@ -45,7 +45,7 @@ import { useEffect, useState } from 'react'
    import Logo from '../assets/logo.png';
    import MetaLogo from '../assets/metamask.svg';
    require('dotenv').config()
-   const LANAddress = "0x4417E9B86Be5d09331eF8B5a98Af4589228F476E"
+   const LANAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
    //process.env.LAN_ADDRESS
 
    const USDC_Address="0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
@@ -105,11 +105,15 @@ const signer = provider.getSigner()
           console.log("PROVIDER: " , provider)
           console.log("SIGNER: " , signer)
           // dumb way to get current timestamp?
-          const block_num=  await provider.getBlockNumber()
-          const timestamp = (await provider.getBlock(block_num)).timestamp;
+          //const latest_block = ethers.provider.getBlock("latest")
+          //const block_num=  await provider.getBlockNumber()
+          //console.log("blocknum**: " , block_num)
+          const timestamp = (await provider.getBlock("latest")).timestamp;
 console.log("*********************timestamp: " , timestamp)
-const start_time=timestamp+200;
-console.log("START TIME: " , new Date(start_time))
+
+//JS epoch is in milliseconds, solidity is in seconds
+const start_time=new Date(timestamp*1000).toLocaleString()
+console.log("START TIME: " , start_time )
 
 //contract.connect
           const transaction = await contract.connect(signer).launch(

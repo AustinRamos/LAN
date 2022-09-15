@@ -224,9 +224,7 @@ function App() {
   };
 
   return (
-
     <Flex
-
       align={'center'}
       justify={'center'}
       bg={useColorModeValue('gray.70', 'gray.5800')}
@@ -235,14 +233,11 @@ function App() {
       <Box textAlign="center" minW={'100vw'} overflowY="auto">
 
         <Grid h="5vh">
-
           
           <TitleBar userInfo={userInfo} onConnect={onConnect}>
-
           </TitleBar>
 
         </Grid>
-
 
         <Container>
 
@@ -253,22 +248,16 @@ function App() {
               <Dashboard></Dashboard>
             </Route>
 
-
             {/* DOES THIS NEED TO WRAP ALL THE ROUTES? */}
           </Switch>
-
           <Route exact path="/CreatePool">
             <CreateLendingPool ></CreateLendingPool>
           </Route>
           <Route exact path="/Pools">
             <Pools ></Pools>
           </Route>
-
         </Container>
-
-
         <Stack spacing={8} mx={'auto'} w={['90vw', 450, 550]} py={12} px={6}>
-
           <Stack pt={50} align={'center'}>
           </Stack>
 
