@@ -163,15 +163,14 @@ Existing Auctions:
 </Thead>
 <Tbody>
 {loans.map(loan=>
-<LinkBox>
-<LinkOverlay>
+
   <Tr onClick={handleClick()}>
     <Td>
       {loan[0].substring(0,7)}...
       
     </Td>
     <Td>
-      USDC {/* USDC Will need way to update this and check if usdc, frx, weth addy. */}
+      FRAX {/* USDC Will need way to update this and check if usdc, frx, weth addy. */}
     </Td>
     <Td>
       {loan[9].toNumber()}
@@ -183,8 +182,7 @@ Existing Auctions:
     {getdate(loan[8].toNumber())}
     </Td>
   </Tr>
-  </LinkOverlay>
-  </LinkBox>
+
 )}
 
 </Tbody>
