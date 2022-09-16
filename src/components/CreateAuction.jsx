@@ -159,6 +159,7 @@ address _operator,
 
                 <Input type="text" placeholder="Auction 1" {...register("auctionName")} />
                 <FormLabel as='legend'>Base Asset</FormLabel>
+                
                 <RadioGroup size="sm" defaultValue='FRAX' {...register("baseAsset")}>
                     <HStack spacing='12px'>
                         <Radio size="sm" value='FRAX' {...register("baseAsset")}>FRAX</Radio>

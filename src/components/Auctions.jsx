@@ -159,8 +159,6 @@ Existing Auctions:
 <Th> Apr </Th>
 <Th> End Time </Th>
 
-
-
 </Tr>
 </Thead>
 <Tbody>
