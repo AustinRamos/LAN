@@ -23,13 +23,14 @@ import {
     Input,
     Select,
     VStack,
-    FormHelperText
+    FormHelperText,
+    Checkbox
 } from '@chakra-ui/react';
 
 
 import { useForm } from "react-hook-form";
 
-import { ethers } from 'ethers'
+import { constants, ethers } from 'ethers'
 
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import LAN from '../artifacts/contracts/mainliquidations.sol/LAN.json'
@@ -39,11 +40,13 @@ import { useEffect, useState } from 'react'
 import Logo from '../assets/logo.png';
 import MetaLogo from '../assets/metamask.svg';
 
-import { LAN_ADDRESS, NFT_ADDRESS, USDC_ADDRESS } from '../constants'
+import { LAN_ADDRESS, NFT_ADDRESS, USDC_ADDRESS,FRAX_ADDRESS } from '../constants'
 
-export default function CreateLendingPool(props) {
+export default function CreateAuction(props) {
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, getValues, handleSubmit, formState: { errors } } = useForm();
+
+const [currAuctionName, setCurrAuctionName] = useState("")
 
     async function requestAccount() {
         await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -80,6 +83,15 @@ export default function CreateLendingPool(props) {
         })
     })
 
+    const getBaseAsset = (asset)=>{
+        if(asset==="FRAX"){
+            return FRAX_ADDRESS;
+        }
+        if(asset==="USDC"){
+            return USDC_ADDRESS;
+        }
+    }
+ 
     async function createPool() {
         if (typeof window.ethereum !== 'undefined') {
             await requestAccount()
@@ -89,14 +101,16 @@ export default function CreateLendingPool(props) {
             //await provider.send("eth_requestAccounts", []);
             const signer = provider.getSigner()
             const contract = new ethers.Contract(LAN_ADDRESS, LAN.abi, signer)
+
+            console.log("TEST VALS ", getValues())
          
             const timestamp = (await provider.getBlock("latest")).timestamp;
 
          
             //will need a date thing for that
-            const new_start_time = Math.round(Date.now() / 1000)
-
-            console.log("NEW START TIME", new_start_time)
+            const start_time = Math.round(Date.now() / 1000)
+                const end_time= start_time+(86400*parseInt(getValues("auctionDuration")))
+            console.log("NEW START TIME", start_time)
       
             /// @param _operator, EOA or normal Contract. Can act on behalf of owner to rollover a loan. Set address(0) if not used
     /// @param _token, base borrowable asset, only one per loan.
@@ -109,15 +123,15 @@ export default function CreateLendingPool(props) {
     /// @param _whitelisted, if the loan is whitelisted to only approved bidders
 
             const transaction = await contract.connect(signer).launch(
-                ethers.constants.AddressZero,
-                USDC_ADDRESS,
-                NFT_ADDRESS, //address of nft wrapped?
+                getValues("operatorAddress"),
+                getBaseAsset(getValues("baseAsset")),
+                getValues("collectionAddress"), //address of nft wrapped?
                 ethers.constants.AddressZero, //oracle address
-                5, //nft_id 
-                new_start_time + 600,
-                new_start_time + 60000,
-                false,
-                false
+                getValues("nftId"), //nft_id 
+                start_time + 600,
+                end_time,
+                getValues("liquidatable"),
+                getValues("whitelisted")
             )
 
             await transaction.wait()
@@ -125,34 +139,63 @@ export default function CreateLendingPool(props) {
     }
     return (<div>
 
+
+{/* 
+address _operator, 
+        address _token,  
+        address _oracleAddress,
+        address _collectionAddress,
+        uint256 _nftId, 
+        uint256 _startTime, 
+        uint256 _endTime, 
+        bool _liquidatable,
+        bool _whitelisted) */}
+
         <FormControl>
             <form onSubmit={handleSubmit(createPool)}>
                 {/* Will this chakra input work instead of input regular */}
 
-                <FormLabel as='legend'>Pool Name</FormLabel>
+                <FormLabel as='legend'>Auction Name</FormLabel>
 
-                <Input type="text" placeholder="Pool Party" {...register("poolName")} />
+                <Input type="text" placeholder="Auction 1" {...register("auctionName")} />
                 <FormLabel as='legend'>Base Asset</FormLabel>
-                <RadioGroup size="sm" defaultValue='FRAX'>
+                <RadioGroup size="sm" defaultValue='FRAX' {...register("baseAsset")}>
                     <HStack spacing='12px'>
-                        <Radio size="sm" value='FRAX'>FRAX</Radio>
-                        <Radio value='WETH'>WETH</Radio>
-                        <Radio value='USDC'>USDC</Radio>
+                        <Radio size="sm" value='FRAX' {...register("baseAsset")}>FRAX</Radio>
+                        <Radio value='WETH' {...register("baseAsset")} >WETH</Radio>
+                        <Radio value='USDC' {...register("baseAsset")} >USDC</Radio>
                     </HStack>
                 </RadioGroup>
 
-                <FormLabel as='legend'>Admin</FormLabel>
-                <Input type="text" placeholder="0x...." {...register("poolName")} />
+                <FormLabel as='legend'>Operator</FormLabel>
+                <Input type="text" placeholder="0x...." {...register("operatorAddress")} />
 
                 <FormLabel as='legend'>Max Auction Duration</FormLabel>
-                <Select placeholder='Select Duration'>
-                    <option value='option1'>7 days</option>
-                    <option value='option2'>14 days</option>
-                    <option value='option3'>28 days</option>
+                <Select placeholder='Select Duration' {...register("auctionDuration")}>
+                    <option value='7'>7 days</option>
+                    <option value='14'>14 days</option>
+                    <option value='28'>28 days</option>
                 </Select>
 
-                <FormLabel as='legend'>Assets</FormLabel>
-                <VStack>
+                <FormLabel as='legend'>Oracle Address</FormLabel>
+                {/* (wrapper or nft) */}
+                <Input type="text" placeholder="0x...." {...register("oracleAddress")} />
+
+                <FormLabel as='legend'>Collection Address</FormLabel>
+                <Input type="text" placeholder="0x...." {...register("collectionAddress")} />
+
+                <FormLabel as='legend'>NFT ID </FormLabel>
+                <Input type="text" placeholder="0x...." {...register("nftId")} />
+
+                
+                <Checkbox {...register("liquidatable")}> liquidatable
+                </Checkbox>
+
+                <Checkbox {...register("whitelisted")}> whitelisted
+                </Checkbox>
+              
+
+                {/* <VStack>
                     <HStack>
                         <FormHelperText>Address</FormHelperText>
                         <FormHelperText>LTV</FormHelperText>
@@ -160,7 +203,7 @@ export default function CreateLendingPool(props) {
                         <FormHelperText>Oracle</FormHelperText>
                     </HStack>
                     <HStack spacing='12px'>
-                        {/* Register Assets  */}
+                        {/* Register Assets 
 
                         <Input type="text" placeholder="0x...." {...register("poolName")} />
                         <Input type="text" placeholder="LTV" {...register("poolName")} />
@@ -169,7 +212,7 @@ export default function CreateLendingPool(props) {
 
                     </HStack>
                     <HStack spacing='12px'>
-                        {/* Register Assets  */}
+                        {/* Register Assets  *
                         <Input type="text" placeholder="0x...." {...register("poolName")} />
                         <Input type="text" placeholder="LTV" {...register("poolName")} />
                         <Input type="text" placeholder="LowestApi" {...register("poolName")} />
@@ -177,21 +220,20 @@ export default function CreateLendingPool(props) {
 
                     </HStack>
                     <HStack spacing='12px'>
-                        {/* Register Assets  */}
+                        {/* Register Assets  *
                         <Input type="text" placeholder="0x...." {...register("poolName")} />
                         <Input type="text" placeholder="LTV" {...register("poolName")} />
                         <Input type="text" placeholder="LowestApi" {...register("poolName")} />
                         <Input type="text" placeholder="Oracle Address" {...register("poolName")} />
 
                     </HStack>
-                </VStack>
-
-
-                <FormLabel as='legend'>Advanced:</FormLabel>
+                </VStack> */}
 
 
 
+<Flex>
                 <Button type="submit" > Create Pool</Button>
+                </Flex>
             </form>
         </FormControl>
     </div>

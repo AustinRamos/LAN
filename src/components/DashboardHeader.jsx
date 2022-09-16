@@ -15,7 +15,7 @@ import {
   AvatarBadge,
   MenuList,
   useColorModeValue,
-  Grid
+  Grid,
 } from '@chakra-ui/react';
 
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
@@ -29,7 +29,7 @@ export default function DashboardHeader(props) {
 <Center >
             <Grid h="17vh">
               <Stack spacing={8} direction='row' align='center'>
-                <Link to="/borrow" key="/borrow">
+                {/* <Link to="/borrow" key="/borrow">
                   <Button
                     isLoading={false}
                     spinnerPlacement="start"
@@ -55,9 +55,9 @@ export default function DashboardHeader(props) {
                   }}
                 >
                   Supply
-            </Button>
+            </Button> */}
 
-                <Link to="/CreatePool" key="/CreatePool">
+                <Link to="/CreateAuction" key="/CreateAuction">
                   <Button
                     isLoading={false}
                     spinnerPlacement="start"
@@ -68,11 +68,11 @@ export default function DashboardHeader(props) {
                       bg: 'blue.500',
                     }}
                   >
-                    Create Lending Pool
+                    Create Auction
             </Button>
 
                 </Link>
-                <Link to="/Pools" key="/Pools">
+                <Link to="/Auctions" key="/Auctions">
                   <Button
                     isLoading={false}
                     spinnerPlacement="start"
@@ -83,10 +83,10 @@ export default function DashboardHeader(props) {
                       bg: 'blue.500',
                     }}
                   >
-                    Browse Existing Pools
-            </Button>
+                    View Auctions
+             </Button>
                 </Link>
-                <Button
+             {/*   <Button
                   isLoading={false}
                   spinnerPlacement="start"
                   loadingText="Stake"
@@ -97,7 +97,7 @@ export default function DashboardHeader(props) {
                   }}
                 >
                   View Auctions
-            </Button>
+            </Button> */}
               </Stack>
             </Grid>
           </Center> 

@@ -34,7 +34,7 @@ import Dashboard from './components/Dashboard'
 import { Link, Route, Switch, useLocation } from "react-router-dom";
 
 
-import Pools from './components/Pools'
+import Auctions from './components/Auctions'
 import { InfoIcon } from '@chakra-ui/icons';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Logo } from './Logo';
@@ -47,7 +47,7 @@ import Network from './assets/network-info';
 import DashboardHeader from './components/DashboardHeader'
 
 import "rari-components/assets/fonts/avenir-next/avenir.css";
-import CreateLendingPool from './components/CreateLendingPool';
+import CreateAuction from './components/CreateAuction';
 import { LAN_ADDRESS, NFT_ADDRESS, USDC_ADDRESS } from './constants'
 
 
@@ -275,11 +275,11 @@ function App() {
 
             {/* DOES THIS NEED TO WRAP ALL THE ROUTES? */}
           </Switch>
-          <Route exact path="/CreatePool">
-            <CreateLendingPool ></CreateLendingPool>
+          <Route exact path="/CreateAuction">
+            <CreateAuction ></CreateAuction>
           </Route>
-          <Route exact path="/Pools">
-            <Pools ></Pools>
+          <Route exact path="/Auctions">
+            <Auctions ></Auctions>
           </Route>
         </Container>
         <Stack spacing={8} mx={'auto'} w={['90vw', 450, 550]} py={12} px={6}>

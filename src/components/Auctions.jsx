@@ -23,7 +23,16 @@ import {
   Input,
   Select,
   VStack,
-  FormHelperText
+  FormHelperText,
+  TableContainer,
+  Table,
+  Thead,
+  Tr,
+  Td,
+  Th,
+  Tbody,
+  LinkBox,
+  LinkOverlay
 } from '@chakra-ui/react';
 
 // import Blockies from 'react-blockies';
@@ -127,25 +136,81 @@ export default function Pools() {
 
 
   //ultimately would be great to use rari component for the way they list their pools... 
-
+const handleClick = ()=>{
+  console.log("ROW CLICKED")
+}
   const getdate = (timestamp)=>{
       return new Date(Math.round(timestamp*1000)).toLocaleString()
   }
-  return (<div>
-    Number of Pools:
+  return (
+  <div>
+
+Existing Auctions:
+<Flex>
+
+<TableContainer>
+<Table variant='simple'>
+{/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
+<Thead>
+<Tr>
+<Th>Owner</Th>
+<Th>Token</Th>
+<Th> Bids </Th>
+<Th> Apr </Th>
+<Th> End Time </Th>
+
+
+
+</Tr>
+</Thead>
+<Tbody>
+{loans.map(loan=>
+<LinkBox>
+<LinkOverlay>
+  <Tr onClick={handleClick()}>
+    <Td>
+      {loan[0].substring(0,7)}...
+      
+    </Td>
+    <Td>
+      USDC {/* USDC Will need way to update this and check if usdc, frx, weth addy. */}
+    </Td>
+    <Td>
+      {loan[9].toNumber()}
+    </Td>
+    <Td>
+      {loan[5].toNumber()}
+    </Td>
+    <Td>
+    {getdate(loan[8].toNumber())}
+    </Td>
+  </Tr>
+  </LinkOverlay>
+  </LinkBox>
+)}
+
+</Tbody>
+
+</Table>
+
+</TableContainer>
+
+</Flex>
+
+    Number of Auctions:
     {count}
     {     console.log("loans** ", loans)
         }
         {          console.log("count**" , count)
 }
     <ul>
-      {
+      {/* {
         loans.map(loan =>
                // console.log("loan in react return " , loan)
           <li key={loan[8].toNumber()}>end time: {getdate(loan[8].toNumber())}</li>
- 
+
        
-        )}
+        )} */}
     </ul>
   </div>)
 
