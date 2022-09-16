@@ -148,8 +148,8 @@ const handleClick = ()=>{
 Existing Auctions:
 <Flex>
 
-<TableContainer>
-<Table variant='simple'>
+<TableContainer maxWidth="100%" size="lg">
+<Table variant='striped'size="lg" maxWidth="100%">
 {/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
 <Thead>
 <Tr>
@@ -158,9 +158,10 @@ Existing Auctions:
 <Th> Bids </Th>
 <Th> Apr </Th>
 <Th> End Time </Th>
-
+<Th> TEST</Th>
 </Tr>
 </Thead>
+
 <Tbody>
 {loans.map(loan=>
 
@@ -179,11 +180,12 @@ Existing Auctions:
       {loan[5].toNumber()}
     </Td>
     <Td>
-    {getdate(loan[8].toNumber())}
+     {getdate(loan[8].toNumber())} 
     </Td>
+    <Td><Button>View</Button></Td>
   </Tr>
 
-)}
+)}{new Date().toLocaleTimeString()}
 
 </Tbody>
 

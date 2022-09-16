@@ -40,8 +40,10 @@ const address = await owner.getAddress()
   console.log(`deployed LAN contract to ${lan.address}`)
   console.log("deployed nft: ",nftFactory.address)
 
+    await nftFactory.connect(owner).mint(0)
+
   //now need to send nft to dotenv of accnt 10
-  const res = await nftFactory.connect(owner).createToken("test");
+  //const res = await nftFactory.connect(owner).createToken("test");
 
   
 }

@@ -162,9 +162,9 @@ address _operator,
                 
                 <RadioGroup size="sm" defaultValue='FRAX' {...register("baseAsset")}>
                     <HStack spacing='12px'>
-                        <Radio size="sm" value='FRAX' {...register("baseAsset")}>FRAX</Radio>
-                        <Radio value='WETH' {...register("baseAsset")} >WETH</Radio>
-                        <Radio value='USDC' {...register("baseAsset")} >USDC</Radio>
+                        <Radio size="sm" value='FRAX' >FRAX</Radio>
+                        <Radio value='WETH'  >WETH</Radio>
+                        <Radio value='USDC'  >USDC</Radio>
                     </HStack>
                 </RadioGroup>
 
