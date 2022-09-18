@@ -110,6 +110,7 @@ const [currAuctionName, setCurrAuctionName] = useState("")
             //will need a date thing for that
             const start_time = Math.round(Date.now() / 1000)
                 const end_time= start_time+(86400*parseInt(getValues("auctionDuration")))
+            console.log("USDC ERROR : ", USDC_ADDRESS)
             console.log("NEW START TIME", start_time)
       
             /// @param _operator, EOA or normal Contract. Can act on behalf of owner to rollover a loan. Set address(0) if not used
@@ -121,7 +122,30 @@ const [currAuctionName, setCurrAuctionName] = useState("")
     /// @param _endTime, the endTime of the loan in blocks
     /// @param _liquidatable, if the loan can be liquidatable
     /// @param _whitelisted, if the loan is whitelisted to only approved bidders
+console.log(getValues("operatorAddress"))
+console.log(getValues("baseAsset"))
 
+console.log(getValues("collectionAddress"))
+
+console.log(getValues("nftId"))
+
+console.log(getValues("operatorAddress"))
+
+console.log(getValues("liquidatable"))
+console.log(getValues("whitelisted"))
+
+const baseAssetAddress = USDC_ADDRESS
+            // const transaction = await contract.connect(signer).launch(
+            //     getValues("operatorAddress"),
+            //     baseAssetAddress,
+            //     getValues("collectionAddress"), //address of nft wrapped?
+            //     ethers.constants.AddressZero, //oracle address
+            //     parseInt(getValues("nftId")), //nft_id 
+            //     start_time + 600,
+            //     end_time,
+            //     getValues("liquidatable"),
+            //     getValues("whitelisted")
+            // )
             const transaction = await contract.connect(signer).launch(
                 getValues("operatorAddress"),
                 getBaseAsset(getValues("baseAsset")),
@@ -140,16 +164,7 @@ const [currAuctionName, setCurrAuctionName] = useState("")
     return (<div>
 
 
-{/* 
-address _operator, 
-        address _token,  
-        address _oracleAddress,
-        address _collectionAddress,
-        uint256 _nftId, 
-        uint256 _startTime, 
-        uint256 _endTime, 
-        bool _liquidatable,
-        bool _whitelisted) */}
+
 
         <FormControl>
             <form onSubmit={handleSubmit(createPool)}>
@@ -160,11 +175,11 @@ address _operator,
                 <Input type="text" placeholder="Auction 1" {...register("auctionName")} />
                 <FormLabel as='legend'>Base Asset</FormLabel>
                 
-                <RadioGroup size="sm" defaultValue='FRAX' {...register("baseAsset")}>
+                <RadioGroup size="sm" defaultValue='USDC' {...register("baseAsset")}>
                     <HStack spacing='12px'>
-                        <Radio size="sm" value='FRAX' >FRAX</Radio>
-                        <Radio value='WETH'  >WETH</Radio>
                         <Radio value='USDC'  >USDC</Radio>
+                             <Radio size="sm" value='FRAX' >FRAX</Radio>
+                             <Radio value='WETH'  >WETH</Radio>
                     </HStack>
                 </RadioGroup>
 

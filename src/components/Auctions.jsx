@@ -1,5 +1,6 @@
 import {
   Flex,
+ Image ,
   Box,
   Stack,
   HStack,
@@ -9,7 +10,6 @@ import {
   MenuButton,
   Avatar,
   Tooltip,
-  Image,
   Link,
   Text,
   AvatarBadge,
@@ -53,7 +53,7 @@ import { useEffect, useState } from 'react'
 
 import Logo from '../assets/logo.png';
 import MetaLogo from '../assets/metamask.svg';
-
+import AuctionInfo from '../components/AuctionInfo'
 import { LAN_ADDRESS, NFT_ADDRESS, USDC_ADDRESS } from '../constants'
 
 
@@ -61,13 +61,20 @@ import { LAN_ADDRESS, NFT_ADDRESS, USDC_ADDRESS } from '../constants'
 
 
 
-export default function Pools() {
+export default function Auctions() {
 
+const [showAuction,setShowAuction] = useState(false);
+const [auctionId,setAuctionId] = useState(null);
+
+//value supplied by view button ssomehow?
+//const [auctiontoShowsetAuctionToShow] = useState(null) 
 
 
   //  console.log("PROVIDER: " , provider)
   const [count, setCount] = useState(0)
   const [loans, setLoans] = useState([])
+
+  const [currcontract,setContract] = useState(null)
 
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   // const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
@@ -75,6 +82,7 @@ export default function Pools() {
   //await provider.send("eth_requestAccounts", []);
   const signer = provider.getSigner()
   const contract = new ethers.Contract(LAN_ADDRESS, LAN.abi, signer)
+  // setContract(contract)
   // dumb way to get current timestamp?
 
 
@@ -145,7 +153,15 @@ const handleClick = ()=>{
   return (
   <div>
 
-Existing Auctions:
+  {showAuction  ?   
+   <h2>         
+
+  <AuctionInfo nftAddress="" poolId={auctionId}></AuctionInfo>
+        </h2>     
+        :
+  
+<div>
+<p>Existing Auctions:</p>
 <Flex>
 
 <TableContainer maxWidth="100%" size="lg">
@@ -158,7 +174,7 @@ Existing Auctions:
 <Th> Bids </Th>
 <Th> Apr </Th>
 <Th> End Time </Th>
-<Th> TEST</Th>
+
 </Tr>
 </Thead>
 
@@ -171,21 +187,25 @@ Existing Auctions:
       
     </Td>
     <Td>
-      FRAX {/* USDC Will need way to update this and check if usdc, frx, weth addy. */}
+      USDC {/* USDC Will need way to update this and check if usdc, frx, weth addy. */}
     </Td>
     <Td>
-      {loan[9].toNumber()}
+      {loan[8].toNumber()}
     </Td>
     <Td>
       {loan[5].toNumber()}
     </Td>
     <Td>
-     {getdate(loan[8].toNumber())} 
+     {getdate(loan.time[1].toNumber())} 
+
     </Td>
-    <Td><Button>View</Button></Td>
+    <Td>
+    <Button onClick={()=>{setShowAuction(true)
+     setAuctionId(loan[11].toNumber())}} >View</Button>
+    </Td>
   </Tr>
 
-)}{new Date().toLocaleTimeString()}
+)}
 
 </Tbody>
 
@@ -210,8 +230,9 @@ Existing Auctions:
        
         )} */}
     </ul>
+  </div>
+  }
   </div>)
 
+      }
 
-
-}

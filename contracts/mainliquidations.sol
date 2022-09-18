@@ -3,6 +3,7 @@ pragma solidity ^0.8.16;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "./IPriceOracle.sol";
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 
 /// @title LAN: unopinianated lending infrastructure for literally any nft
 /// @author William, Junion, Austin
@@ -10,6 +11,7 @@ import "./IPriceOracle.sol";
 
 
 contract LAN {
+    using SafeMath for uint; 
     event newPool(
         uint256 indexed poolId,
         address collectionAddress,
@@ -31,8 +33,7 @@ contract LAN {
     /// @param _collectionAddress, address for the Wrapper NFT, although this could be literally any NFT
     /// @param _apr, APR for the loan
     /// @param _nftId, nftId
-    /// @param _startTime, the startTime of the loan in blocks
-    /// @param _endTime, the endTime of the loan in blocks
+    /// @param time Time struct contains start time and end time
     /// @param _numBid, the number of bids, keep track of the latest bid
     /// @param _liquidatable, if the loan can be liquidatable
     /// @param _whitelisted, if the loan is whitelisted to only approved bidders
@@ -44,13 +45,13 @@ contract LAN {
         address collectionAddress;
         uint256 apr;
         uint256 nftId;
-        uint256 startTime;
-        uint256 endTime;
+        Time time;
         uint256 numBids;
         // True if liquidatable, False if not
         bool liquidatable;
         // True if whitelisted mode on, False if not
         bool whitelisted;
+        uint256 poolId;
     }
     /// @notice Keeping track of loans. PoolId => loans
     mapping(uint256 => Loan) public loans;
@@ -61,6 +62,11 @@ contract LAN {
         address user;
         uint256 apr;
         uint16 ltv;
+    }
+
+    struct Time {
+        uint256 startTime;
+        uint256 endTime;
     }
 
     /// @notice Mapping from PoolID => Bid Number => Bid. Keep track of bids
@@ -109,22 +115,24 @@ contract LAN {
         require(_startTime >= block.timestamp, "LAN: start time in past");
         require(_endTime > _startTime, "LAN: start after end");
         loans[count] = Loan({
-            owner: IERC721(_collectionAddress).ownerOf(_nftId),
+            // owner: IERC721(_collectionAddress).ownerOf(_nftId),
+            owner:msg.sender,
             operator: _operator,
             token: _token,
             oracleAddress: _oracleAddress,
             collectionAddress: _collectionAddress,
             nftId: _nftId,
-            startTime: _startTime,
-            endTime: _endTime,
+            time: Time({startTime :_startTime,endTime:_endTime}),
             apr: 0,
             numBids: 0,
             liquidatable: _liquidatable,
-            whitelisted: _whitelisted
+            whitelisted: _whitelisted,
+            poolId: count
         });
+        
         bids[count][0].bidTime = block.timestamp;
-        emit newPool(count, _collectionAddress, _nftId);
         count++;
+        emit newPool(count, _collectionAddress, _nftId);
     }
 
     /// @notice Setting and accepting bids for the asset
@@ -138,7 +146,7 @@ contract LAN {
         uint256 _apr,
         uint16 _ltv
     ) external {
-        require(_started(_poolId), "LAN: not started");
+        //require(_started(_poolId), "LAN: not started");
         require(!_ended(_poolId), "LAN: already ended");
         Loan storage loan = loans[_poolId];
         // Check if it's whitelisted and if so, the address is whitelisted
@@ -162,19 +170,35 @@ contract LAN {
         // Update and transfer tokens to right people.
         bids[_poolId][loan.numBids] = newBid;
         loan.apr = _apr;
-        uint256 numBids = loan.numBids + 1;
-        loan.numBids = numBids;
+        
+
+
+        //SO IN THE ACSE OF FIRST BIDDER YOU JUST OMMIT this first transfer. still hammer out what its doingtho conceptually.
+        //also if bugs thing decimals 10**18 etc.
+
+        //still need to work thru it conceptually but at least this should fix it
+        //if this is first bid.. dont try to send to prev.
+   uint256 numBids = loan.numBids;
+   if (numBids!=0){
+ 
         IERC20(loan.token).transferFrom(
             msg.sender,
             bids[_poolId][numBids].user,
             loanValue
         );
+   }
+       numBids++;
+        loan.numBids = numBids;
+   
         IERC20(loan.token).transferFrom(
             msg.sender,
             loan.owner,
             _amount - loanValue
         );
+        
     }
+
+
 
     /// @notice Transferring a bid to another address. Ignores whitelist if there is one. Similar to the NFTfi Promissory Note
     /// @param _poolId Pool ID
@@ -215,7 +239,7 @@ contract LAN {
     /// @param _poolId pool ID
     function cancel(uint256 _poolId) external onlyOwner(_poolId) {
         Loan memory loan = loans[_poolId];
-        require(loan.startTime > block.timestamp, "LAN: already started");
+        require(loan.time.startTime > block.timestamp, "LAN: already started");
         delete loan;
         emit loanCancelled(_poolId);
     }
@@ -303,26 +327,27 @@ contract LAN {
         internal
         view
         returns (uint256)
+        
     {
         Loan memory loan = loans[_poolId];
         Bid memory latestBid = bids[_poolId][loan.numBids];
         uint256 timeElapsed;
-        if (_ended(_poolId)) {
-            timeElapsed = latestBid.bidTime - loan.endTime;
-        } else {
-            timeElapsed = latestBid.bidTime - block.timestamp;
-        }
-        return
+
+
+return
             latestBid.bidAmount +
-            (((latestBid.bidAmount * loan.apr) / 10**18) * timeElapsed) /
-            SECONDS_IN_ONE_YEAR;
+            (((latestBid.bidAmount.mul(loan.apr)).div( 10**18)).mul(timeElapsed)).div(
+            SECONDS_IN_ONE_YEAR);
+    
+           
     }
+       
 
     function _ended(uint256 _poolId) internal view returns (bool) {
-        return loans[_poolId].endTime <= block.timestamp;
+        return loans[_poolId].time.endTime <= block.timestamp;
     }
 
     function _started(uint256 _poolId) internal view returns (bool) {
-        return loans[_poolId].startTime < block.timestamp;
+        return loans[_poolId].time.startTime < block.timestamp;
     }
 }

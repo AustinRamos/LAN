@@ -4,6 +4,7 @@
 // You can also run a script with `npx hardhat run <script>`. If you do that, Hardhat
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
+
 const { ethers } = require("hardhat");
 const hre = require("hardhat");
 
@@ -27,12 +28,20 @@ async function main() {
   const nftFactory = await NFT_Factory.deploy();
   const lan = await LAN.deploy();
 
+//mock usdc and mint to 0xf39
+    const USDC_CONTRACT = await hre.ethers.getContractFactory("USDC");
+  const usdc = await USDC_CONTRACT.deploy(ethers.utils.parseUnits("100000", 18))
+
   await lan.deployed();
 
   await nftFactory.deployed();
 
-const address = await owner.getAddress()
-  console.log("owner: " , address);
+await usdc.deployed();
+
+  console.log("USDC contract: " , usdc.address);
+   //getbalanceof?
+
+   //so need to put usdc address into constants and metamask...
 
   // console.log(
   //   `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
