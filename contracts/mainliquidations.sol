@@ -170,14 +170,7 @@ contract LAN {
         // Update and transfer tokens to right people.
         bids[_poolId][loan.numBids] = newBid;
         loan.apr = _apr;
-        
 
-
-        //SO IN THE ACSE OF FIRST BIDDER YOU JUST OMMIT this first transfer. still hammer out what its doingtho conceptually.
-        //also if bugs thing decimals 10**18 etc.
-
-        //still need to work thru it conceptually but at least this should fix it
-        //if this is first bid.. dont try to send to prev.
    uint256 numBids = loan.numBids;
    if (numBids!=0){
  
@@ -187,8 +180,8 @@ contract LAN {
             loanValue
         );
    }
-       numBids++;
-        loan.numBids = numBids;
+ 
+        loan.numBids = numBids+1;
    
         IERC20(loan.token).transferFrom(
             msg.sender,

@@ -181,7 +181,7 @@ const handleClick = ()=>{
 <Tbody>
 {loans.map(loan=>
 
-  <Tr onClick={handleClick()}>
+  <Tr key = {loan.poolId}onClick={handleClick()}>
     <Td>
       {loan[0].substring(0,7)}...
       
