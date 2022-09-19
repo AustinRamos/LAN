@@ -193,7 +193,7 @@ const handleClick = ()=>{
       {loan[8].toNumber()}
     </Td>
     <Td>
-      {loan[5].toNumber()}
+      {loan[5].toNumber()}%
     </Td>
     <Td>
      {getdate(loan.time[1].toNumber())} 

@@ -20,8 +20,8 @@ async function main() {
 
   // await lock.deployed();
 
-  //getting a list of the accounts in the node (hardhat network) and only keeping first one.
-  const [owner] = await ethers.getSigners();
+  //getting a list of the accounts in the node (hardhat network) and only keeping first two.
+  const [owner,nft_holder] = await ethers.getSigners();
 
   const LAN = await hre.ethers.getContractFactory("LAN");
   const NFT_Factory = await hre.ethers.getContractFactory("SimpleNft");
@@ -49,7 +49,7 @@ await usdc.deployed();
   console.log(`deployed LAN contract to ${lan.address}`)
   console.log("deployed nft: ",nftFactory.address)
 
-    await nftFactory.connect(owner).mint(0)
+    await nftFactory.connect(nft_holder).mint(0)
 
   //now need to send nft to dotenv of accnt 10
   //const res = await nftFactory.connect(owner).createToken("test");

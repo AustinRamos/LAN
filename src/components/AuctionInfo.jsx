@@ -102,12 +102,20 @@ const { register, getValues, handleSubmit, formState: { errors } } = useForm();
 
 const [currBidNum,setCurrBidNum] = useState(0)
 const [bids,setBids] = useState([])
+const [bestBid,setBestBid] = useState(null)
  useEffect(() => {
+
+//get best bid:
 
 
     contract.loans(props.poolId).then(resp => {
       console.log("BIDNUMS GOTTEN : ", resp[8].toNumber())
       setCurrBidNum(resp[8].toNumber())
+      const bidNum = resp[8].toNumber()
+      //getbestBid
+      contract.bids(props.poolId,resp[8].toNumber()-1).then(resp=>{
+          setBestBid(bestBid)
+      })
 
 //OR currBidNum -1? 
 
@@ -116,7 +124,7 @@ const [bids,setBids] = useState([])
 //if bid=>3 show last 3 bids.
 //if 2 show 2 bids.
 //if 1 show 1 bid...
-const bidNum = resp[8].toNumber()
+
 let val;
 if (bidNum>=3){
     val=3
@@ -128,12 +136,13 @@ if (bidNum>=3){
     val=0
 }
 console.log("VAL*** ", val)
+
       for (let i = bidNum-1; i >=bidNum-val; i--) {
-        
-         console.log(`currBidNum ${bidNum} for loop ${i} `)
+         
+       
  
          contract.bids(props.poolId,i).then(resp => {
-  
+     
          
            //setLoans(loans.concat(resp))
            //setLoans([...loans, resp])
@@ -142,7 +151,7 @@ console.log("VAL*** ", val)
             console.log("bids: " , bids)
          })
         }
-     
+
  
 
       //console.log("LOANS: ", loans)
@@ -189,12 +198,22 @@ console.log("(**********")
     }
 
     
+
+    
     return(<div>
 
         <VStack>
         <Box boxSize='sm'>
   <Image src='https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2021%2F10%2Fbored-ape-yacht-club-nft-3-4-million-record-sothebys-metaverse-0.jpg?w=960&cbr=1&q=90&fit=max' alt='' />
+
+    Current best bid:
+       <getBestBid/>
+
 </Box>
+
+
+
+
 <div>
 Make a bid
 <FormControl> 

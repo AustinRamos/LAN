@@ -34,6 +34,7 @@ import { constants, ethers } from 'ethers'
 
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import LAN from '../artifacts/contracts/mainliquidations.sol/LAN.json'
+import NFT from '../artifacts/contracts/SimpleNft.sol/SimpleNft.json'
 
 import { useEffect, useState } from 'react'
 
@@ -112,45 +113,31 @@ const [currAuctionName, setCurrAuctionName] = useState("")
                 const end_time= start_time+(86400*parseInt(getValues("auctionDuration")))
             console.log("USDC ERROR : ", USDC_ADDRESS)
             console.log("NEW START TIME", start_time)
-      
-            /// @param _operator, EOA or normal Contract. Can act on behalf of owner to rollover a loan. Set address(0) if not used
-    /// @param _token, base borrowable asset, only one per loan.
-    /// @param _oracleAddress, address for the collection address asset. Default is ChainlinkOracle.sol Requires liquidatable = true
-    /// @param _collectionAddress, address for the Wrapper NFT, although this could be literally any NFT
-    /// @param _nftId, nftId
-    /// @param _startTime, the startTime of the loan in blocks
-    /// @param _endTime, the endTime of the loan in blocks
-    /// @param _liquidatable, if the loan can be liquidatable
-    /// @param _whitelisted, if the loan is whitelisted to only approved bidders
-console.log(getValues("operatorAddress"))
-console.log(getValues("baseAsset"))
 
-console.log(getValues("collectionAddress"))
 
-console.log(getValues("nftId"))
 
-console.log(getValues("operatorAddress"))
+           
+            //Approve NFT TRANSFER TO CONTRACT
+  const nft_contract = new ethers.Contract(NFT_ADDRESS,NFT.abi, signer)
+        //(address owner, address approved, uint256 tokenId)
 
-console.log(getValues("liquidatable"))
-console.log(getValues("whitelisted"))
+        //is signer correct?
+        //also remember to compile and add nft to 
+        //and next change metadata uri to show actual nft's!
+        console.log("NFTOWNER= ", signer)
+        nft_contract.approve(LAN_ADDRESS,getValues("nftId")).then(()=>{
+            console.log("NFT SUCCESFULLY APPROVED, SHOULD BE SENT NOW")
+                  //ideally the contract would emit an event bid rejected r bid accepted
+            
 
+console.log("COLLECTION ADDRESSS************************" ,  getValues("collectionAddress"))
+console.log("LAN CONTRACT: " , contract)
 const baseAssetAddress = USDC_ADDRESS
-            // const transaction = await contract.connect(signer).launch(
-            //     getValues("operatorAddress"),
-            //     baseAssetAddress,
-            //     getValues("collectionAddress"), //address of nft wrapped?
-            //     ethers.constants.AddressZero, //oracle address
-            //     parseInt(getValues("nftId")), //nft_id 
-            //     start_time + 600,
-            //     end_time,
-            //     getValues("liquidatable"),
-            //     getValues("whitelisted")
-            // )
-            const transaction = await contract.connect(signer).launch(
+             contract.connect(signer).launch(
                 getValues("operatorAddress"),
                 getBaseAsset(getValues("baseAsset")),
-                getValues("collectionAddress"), //address of nft wrapped?
-                ethers.constants.AddressZero, //oracle address
+                getValues("oracleAddress"), //oracle address
+                 getValues("collectionAddress"), 
                 getValues("nftId"), //nft_id 
                 start_time + 600,
                 end_time,
@@ -158,7 +145,29 @@ const baseAssetAddress = USDC_ADDRESS
                 getValues("whitelisted")
             )
 
-            await transaction.wait()
+
+
+
+            })
+
+
+      
+    //launch auction
+// console.log("COLLECTION ADDRESSS************************" ,  getValues("collectionAddress"))
+// const baseAssetAddress = USDC_ADDRESS
+//             const transaction = await contract.connect(signer).launch(
+//                 getValues("operatorAddress"),
+//                 getBaseAsset(getValues("baseAsset")),
+//                 getValues("collectionAddress"), //address of nft wrapped?
+//                 ethers.constants.AddressZero, //oracle address
+//                 getValues("nftId"), //nft_id 
+//                 start_time + 600,
+//                 end_time,
+//                 getValues("liquidatable"),
+//                 getValues("whitelisted")
+//             )
+
+           // await transaction.wait()
         }
     }
     return (<div>

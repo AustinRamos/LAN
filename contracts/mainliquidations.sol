@@ -130,6 +130,9 @@ contract LAN {
             poolId: count
         });
         
+            IERC721 NFT = IERC721(_collectionAddress);
+            NFT.transferFrom( msg.sender,address(this), _nftId);
+
         bids[count][0].bidTime = block.timestamp;
         count++;
         emit newPool(count, _collectionAddress, _nftId);
@@ -254,7 +257,7 @@ contract LAN {
         ) {
             // End loan
             IERC721 NFT = IERC721(loan.collectionAddress);
-            NFT.safeTransferFrom(address(this), latestBid.user, loan.nftId);
+            NFT.safeTransferFrom(address(this), loans[_poolId].owner, loan.nftId);
             emit loanEnded(_poolId);
             delete loan;
         }
