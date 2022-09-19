@@ -56,6 +56,50 @@ export default function DashboardHeader(props) {
                 >
                   Supply
             </Button> */}
+                 <Link to="/" key="/">
+                  <Button
+                    isLoading={false}
+                    spinnerPlacement="start"
+                    loadingText="Stake"
+                    bg={'blue.400'}
+                    color={'white'}
+                    _hover={{
+                      bg: 'blue.500',
+                    }}
+                  >
+                    Home
+            </Button>
+            </Link>
+
+            <Link to="/Pools" key="/CreatePools">
+                  <Button
+                    isLoading={false}
+                    spinnerPlacement="start"
+                    loadingText="Stake"
+                    bg={'blue.400'}
+                    color={'white'}
+                    _hover={{
+                      bg: 'blue.500',
+                    }}
+                  >
+                    Pools
+            </Button>
+            </Link>
+
+<Link to="/CreatePool" key="/CreatePool">
+                  <Button
+                    isLoading={false}
+                    spinnerPlacement="start"
+                    loadingText="Stake"
+                    bg={'blue.400'}
+                    color={'white'}
+                    _hover={{
+                      bg: 'blue.500',
+                    }}
+                  >
+                    Create Pool
+            </Button>
+            </Link>
 
                 <Link to="/CreateAuction" key="/CreateAuction">
                   <Button
