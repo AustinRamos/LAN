@@ -43,7 +43,7 @@ import MetaLogo from '../assets/metamask.svg';
 
 import { LAN_ADDRESS, NFT_ADDRESS, USDC_ADDRESS,FRAX_ADDRESS } from '../constants'
 
-export default function CreateAuction(props) {
+export default function CreatePool(props) {
 
     const { register, getValues, handleSubmit, formState: { errors } } = useForm();
 
@@ -144,10 +144,6 @@ const baseAssetAddress = USDC_ADDRESS
                 getValues("liquidatable"),
                 getValues("whitelisted")
             )
-
-
-
-
             })
 
 
@@ -170,6 +166,17 @@ const baseAssetAddress = USDC_ADDRESS
            // await transaction.wait()
         }
     }
+
+    // constructor(
+    //     address _admin,
+    //     address _baseAsset,
+    //     address _baseAssetOracle,
+    //     address _LANContract,
+    //     bool _liquidationOnly,
+    //     uint256 _minAPR,
+    //     uint256 _longestTerm,
+    //     uint256 _adminFee
+    // ) {
     return (<div>
 
 
@@ -179,9 +186,9 @@ const baseAssetAddress = USDC_ADDRESS
             <form onSubmit={handleSubmit(createPool)}>
                 {/* Will this chakra input work instead of input regular */}
 
-                <FormLabel as='legend'>Auction Name</FormLabel>
+                <FormLabel as='legend'>Pool Name</FormLabel>
 
-                <Input type="text" placeholder="Auction 1" {...register("auctionName")} />
+                <Input type="text" placeholder="Pool 1" {...register("auctionName")} />
                 <FormLabel as='legend'>Base Asset</FormLabel>
                 
                 <RadioGroup size="sm" defaultValue='USDC' {...register("baseAsset")}>
@@ -192,32 +199,29 @@ const baseAssetAddress = USDC_ADDRESS
                     </HStack>
                 </RadioGroup>
 
-                <FormLabel as='legend'>Operator</FormLabel>
-                <Input type="text" placeholder="0x...." {...register("operatorAddress")} />
+                <FormLabel as='legend'>Base Asset Oracle</FormLabel>
+                <Input type="text" placeholder="0x...." {...register("oracleAddress")} />
 
-                <FormLabel as='legend'>Max Auction Duration</FormLabel>
+                <FormLabel as='legend'>Max Term Duration</FormLabel>
                 <Select placeholder='Select Duration' {...register("auctionDuration")}>
                     <option value='7'>7 days</option>
                     <option value='14'>14 days</option>
                     <option value='28'>28 days</option>
                 </Select>
 
-                <FormLabel as='legend'>Oracle Address</FormLabel>
+                <FormLabel as='legend'>Minimum APR</FormLabel>
                 {/* (wrapper or nft) */}
-                <Input type="text" placeholder="0x...." {...register("oracleAddress")} />
+                <Input type="text" placeholder="5%" {...register("minAPR")} />
 
-                <FormLabel as='legend'>Collection Address</FormLabel>
-                <Input type="text" placeholder="0x...." {...register("collectionAddress")} />
-
-                <FormLabel as='legend'>NFT ID </FormLabel>
-                <Input type="text" placeholder="0x...." {...register("nftId")} />
+                <FormLabel as='legend'>Admin fee</FormLabel>
+                <Input type="text" placeholder="1%" {...register("adminFee")} />
 
                 
-                <Checkbox {...register("liquidatable")}> liquidatable
+                
+                <Checkbox {...register("liquidationOnly")}> liquidation only?
                 </Checkbox>
 
-                <Checkbox {...register("whitelisted")}> whitelisted
-                </Checkbox>
+                
               
 
                 {/* <VStack>
@@ -257,7 +261,7 @@ const baseAssetAddress = USDC_ADDRESS
 
 
 <Flex>
-                <Button type="submit" > Create Auction</Button>
+                <Button type="submit" > Create Pool</Button>
                 </Flex>
             </form>
         </FormControl>

@@ -33,7 +33,7 @@ import {
 import Dashboard from './components/Dashboard'
 import { Link, Route, Switch, useLocation } from "react-router-dom";
 
-
+import CreatePool from './components/CreatePool'
 import Auctions from './components/Auctions'
 import { InfoIcon } from '@chakra-ui/icons';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
@@ -275,6 +275,16 @@ function App() {
 
             {/* DOES THIS NEED TO WRAP ALL THE ROUTES? */}
           </Switch>
+
+
+          <Switch>
+            <Route exact path="/CreatePool">
+              <CreatePool></CreatePool>
+            </Route>
+
+            {/* DOES THIS NEED TO WRAP ALL THE ROUTES? */}
+          </Switch>
+
           <Route exact path="/CreateAuction">
             <CreateAuction ></CreateAuction>
           </Route>
