@@ -56,6 +56,7 @@ import { useEffect, useState } from 'react'
 import Logo from '../assets/logo.png';
 import MetaLogo from '../assets/metamask.svg';
 import AuctionInfo from '../components/AuctionInfo'
+import PoolInfo from './PoolInfo'
 import { LAN_ADDRESS, NFT_ADDRESS, USDC_ADDRESS,BASEBIDREGISTRY_ADDRESS } from '../constants'
 
 
@@ -132,7 +133,9 @@ currBaseBidContract.getDetails().then(resp=>{
 
   {/* <AuctionInfo nftAddress="" poolId={auctionId}></AuctionInfo> */}
         </h2>     
-        
+        {showPool  ?  
+        <PoolInfo></PoolInfo>
+        :
   
 <div>
 <p>Existing Pools:</p>
@@ -162,17 +165,14 @@ currBaseBidContract.getDetails().then(resp=>{
       USDC 
     </Td>
     <Td>
-      {/* {loan[8].toNumber()} */}
+        {pool[2].toNumber()}%
     </Td>
     <Td>
       {/* {loan[5].toNumber()}% */}
     </Td>
     <Td>
-     {/* {getdate(loan.time[1].toNumber())}  */}
-
-    </Td>
-    <Td>
-    <Button onClick={()=>{setShowPool(true)
+    <Button onClick={()=>{
+      setShowPool(true)
      setPoolBidId("test")} //address instead of id... 
      } >View</Button>
     </Td>
@@ -188,18 +188,9 @@ currBaseBidContract.getDetails().then(resp=>{
 
 </Flex>
 
-    {/* Number of Auctions:
-    {count}
-    {     console.log("pools** ", pools)
-        }
-        {          console.log("count**" , count)
-}
-    <ul>
-      
-    </ul> */}
-  </div>
+  </div>}
   
-  </div>)
+  </div>
 
-      }
+  )}
 
