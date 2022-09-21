@@ -71,7 +71,7 @@ export default function DashboardHeader(props) {
             </Button>
             </Link>
 
-            <Link to="/Pools" key="/CreatePools">
+            <Link to="/Pools" key="/Pools">
                   <Button
                     isLoading={false}
                     spinnerPlacement="start"

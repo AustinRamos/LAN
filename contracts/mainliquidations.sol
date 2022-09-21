@@ -64,6 +64,12 @@ contract LAN {
         uint256 ltv;
     }
 
+
+        //only way for frontend to reliably list all the active basebid/pool 
+    mapping(uint256=>address) baseBids;
+    //number of basebid instances..
+    uint256 baseBidNum;
+
     /// @notice Mapping from PoolID => Bid Number => Bid. Keep track of bids
     mapping(uint256 => mapping(uint256 => Bid)) public bids;
 

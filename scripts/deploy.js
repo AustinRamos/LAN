@@ -24,19 +24,39 @@ async function main() {
   const [owner,nft_holder] = await ethers.getSigners();
 
   const LAN = await hre.ethers.getContractFactory("LAN");
+  const lan = await LAN.deploy();
   const NFT_Factory = await hre.ethers.getContractFactory("SimpleNft");
   const nftFactory = await NFT_Factory.deploy();
-  const lan = await LAN.deploy();
+
+
+const baseBidRegistry = await hre.ethers.getContractFactory("BaseBidRegistry");
+  const basebidregistry = await baseBidRegistry.deploy();
 
 //mock usdc and mint to 0xf39
     const USDC_CONTRACT = await hre.ethers.getContractFactory("USDC");
   const usdc = await USDC_CONTRACT.deploy(ethers.utils.parseUnits("100000", 18))
 
+   const Wrapper = await hre.ethers.getContractFactory("Wrapper");
+     const wrapper = await Wrapper.deploy();
+
+
   await lan.deployed();
 
   await nftFactory.deployed();
 
-await usdc.deployed();
+ await usdc.deployed();
+
+await basebidregistry.deployed();
+
+await wrapper.deployed();
+
+
+  console.log(`deployed LAN contract to ${lan.address}`)
+
+  console.log(`BaseBidRegistry contract: ${basebidregistry.address}`)
+
+  console.log(`Wrapper contract: ${wrapper.address}`)
+
 
   console.log("USDC contract: " , usdc.address);
    //getbalanceof?
@@ -46,9 +66,8 @@ await usdc.deployed();
   // console.log(
   //   `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
   // );
-  console.log(`deployed LAN contract to ${lan.address}`)
-  console.log("deployed nft: ",nftFactory.address)
 
+  console.log("deployed nft: ",nftFactory.address)
     await nftFactory.connect(nft_holder).mint(0)
 
   //now need to send nft to dotenv of accnt 10

@@ -27,6 +27,9 @@ interface IWrapper {
 
     function getTokens(uint256 _nftId) external view returns (address[] memory);
 }
+interface Base_Bid_Registry{
+    function addBaseBid(address) external ;
+}
 
 contract BaseBid3  {
      using Math for uint;
@@ -43,9 +46,10 @@ contract BaseBid3  {
     }
 
 
-    // ILan private constant Lan = ILan(address(0)); //insert deployment here
-    // IWrapper private constant Wrapper = IWrapper(address(0));
-    // mapping(address => Term) public whitelists;
+    ILan private Lan; //insert deployment here
+    IWrapper private  Wrapper;
+
+
 
        address admin;
         address baseAsset;
@@ -56,20 +60,22 @@ contract BaseBid3  {
         uint256 minApr; //minapr put back in later.
         uint256 longestTerm;
         uint256 adminFee; //PUT MINAPR BACK IN...
-
+        address baseBidRegistry;
     constructor(
+        address _baseBidRegistry,
         address _admin,
         address _baseAsset,
         address _baseAssetOracle,
         address _LANContract,
+        address _Wrapper,
         bool _liquidationOnly,
         uint16 _kink,
         uint256 _minApr, //minapr put back in later.
         uint256 _longestTerm,
-        uint256 _adminFee//PUT MINAPR BACK IN...
+        uint256 _adminFee
+
     )
-       
-        
+
     {
         admin = _admin;
         baseAsset = _baseAsset;
@@ -83,10 +89,33 @@ contract BaseBid3  {
         //windDown = false;
         //infinite token approval for LAN
         IERC20(baseAsset).approve(_LANContract, type(uint256).max);
+        Wrapper = IWrapper(_Wrapper);
+       Lan = ILan(_LANContract);
+       Base_Bid_Registry(_baseBidRegistry).addBaseBid(address(this));
     }
 
         mapping(address => Term) public whitelists;
+    
+    
+    function getDetails() external view returns (
+            address,
+            address,
+            uint,
+            uint,
+            uint,
+            bool
+    ){
+            return (
+                admin,
+                baseAsset,
+                minApr,
+                longestTerm,
+                adminFee,
+                liquidationOnly
 
+            );
+
+    }
 
  /// @notice Deposit
     /// @param _tokenAmount is amount deposited    

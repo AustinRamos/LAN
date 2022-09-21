@@ -31,17 +31,20 @@ import {
 import { useForm } from "react-hook-form";
 
 import { constants, ethers } from 'ethers'
+//import {hre} from 'hardhat'
 
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import LAN from '../artifacts/contracts/mainliquidations.sol/LAN.json'
 import NFT from '../artifacts/contracts/SimpleNft.sol/SimpleNft.json'
-
+import BaseBid3 from '../artifacts/contracts/BaseBid3.sol/BaseBid3.json'
 import { useEffect, useState } from 'react'
 
 import Logo from '../assets/logo.png';
 import MetaLogo from '../assets/metamask.svg';
 
-import { LAN_ADDRESS, NFT_ADDRESS, USDC_ADDRESS,FRAX_ADDRESS } from '../constants'
+import { LAN_ADDRESS, NFT_ADDRESS, USDC_ADDRESS,FRAX_ADDRESS,BASEBIDREGISTRY_ADDRESS,WRAPPER_ADDRESS} from '../constants'
+
+//const hre = require("hardhat");
 
 export default function CreatePool(props) {
 
@@ -58,6 +61,7 @@ const [currAuctionName, setCurrAuctionName] = useState("")
         if (window.ethereum) {
             provider = window.ethereum;
             setProvider(provider)
+            
         } else if (window.web3) {
             provider = window.web3.currentProvider;
             setProvider(provider)
@@ -68,21 +72,12 @@ const [currAuctionName, setCurrAuctionName] = useState("")
             );
             window.open('https://metamask.io/');
         }
+
+   
+
     })
 
-    //should really store provider with usestate... 
-    useEffect(()=>{
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner()
-        const contract = new ethers.Contract(LAN_ADDRESS, LAN.abi, signer)
-     
-        contract.on("newPool",(count, _collectionAddress, _nftId)=>{
-            console.log("**************************NEWPOOLCREATED***********")
-            console.log(count)
-            console.log(_collectionAddress)
-            console.log(_nftId)
-        })
-    })
+   
 
     const getBaseAsset = (asset)=>{
         if(asset==="FRAX"){
@@ -94,92 +89,70 @@ const [currAuctionName, setCurrAuctionName] = useState("")
     }
  
     async function createPool() {
-        if (typeof window.ethereum !== 'undefined') {
-            await requestAccount()
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            // const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-            // Prom//pt user for account connections
-            //await provider.send("eth_requestAccounts", []);
-            const signer = provider.getSigner()
-            const contract = new ethers.Contract(LAN_ADDRESS, LAN.abi, signer)
+        // if (typeof window.ethereum !== 'undefined') {
+        //     await requestAccount()
+        //     const provider = new ethers.providers.Web3Provider(window.ethereum);
+        //     // const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
+        //     // Prom//pt user for account connections
+        //     //await provider.send("eth_requestAccounts", []);
+        //     const signer = provider.getSigner()
+        //     const contract = new ethers.Contract(LAN_ADDRESS, LAN.abi, signer)
 
-            console.log("TEST VALS ", getValues())
-         
-            const timestamp = (await provider.getBlock("latest")).timestamp;
+            if (typeof window.ethereum !== 'undefined' || (typeof window.web3 !== 'undefined')) {
 
-         
-            //will need a date thing for that
-            const start_time = Math.round(Date.now() / 1000)
-                const end_time= start_time+(86400*parseInt(getValues("auctionDuration")))
-            console.log("USDC ERROR : ", USDC_ADDRESS)
-            console.log("NEW START TIME", start_time)
+    // Web3 browser user detected. You can now use the provider.
+    const accounts = await window.ethereum.enable();
+    // const curProvider = window['ethereum'] || window.web3.currentProvider
 
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
 
+    console.log('accounts: ', accounts);
+    console.log('provider: ', provider);
 
-           
-            //Approve NFT TRANSFER TO CONTRACT
-  const nft_contract = new ethers.Contract(NFT_ADDRESS,NFT.abi, signer)
-        //(address owner, address approved, uint256 tokenId)
-
-        //is signer correct?
-        //also remember to compile and add nft to 
-        //and next change metadata uri to show actual nft's!
-        console.log("NFTOWNER= ", signer)
-        nft_contract.approve(LAN_ADDRESS,getValues("nftId")).then(()=>{
-            console.log("NFT SUCCESFULLY APPROVED, SHOULD BE SENT NOW")
-                  //ideally the contract would emit an event bid rejected r bid accepted
+    const signer = provider.getSigner();
             
 
-console.log("COLLECTION ADDRESSS************************" ,  getValues("collectionAddress"))
-console.log("LAN CONTRACT: " , contract)
-const baseAssetAddress = USDC_ADDRESS
-             contract.connect(signer).launch(
-                getValues("operatorAddress"),
-                getBaseAsset(getValues("baseAsset")),
-                getValues("oracleAddress"), //oracle address
-                 getValues("collectionAddress"), 
-                getValues("nftId"), //nft_id 
-                start_time + 600,
-                end_time,
-                getValues("liquidatable"),
-                getValues("whitelisted")
-            )
-            })
+  //const BaseBid = new ethers.ContractFactory(BaseBid3.abi,accounts[0])
+  const BaseBid = new ethers.ContractFactory(
+    BaseBid3.abi,
+    BaseBid3.bytecode,
+    signer
+  );
 
 
+  //const BaseBid = ethers.getContractFactory("BaseBid3")
+//   console.log("LONGEST TERM:",getValues("longestTerm"))
+//   console.log("PROVIDER: " , provider)
+    //console.log("PROVIDER: " , provider.list)
+console.log(ethers.utils.formatBytes32String(signer))
+  console.log(signer)
+  console.log("BASEBid Contract: " , BaseBid)
+  console.log("BASEBIDREGISTRY_ADDRESS ", BASEBIDREGISTRY_ADDRESS)
+  BaseBid.connect(signer).deploy(
+BASEBIDREGISTRY_ADDRESS,
+accounts[0],
+getBaseAsset(getValues("baseAssetAddress")),
+getValues("baseAssetOracle"),
+LAN_ADDRESS,
+WRAPPER_ADDRESS,
+getValues("liquidationOnly"),
+20, //default value for kink...
+getValues("minApr"),
+getValues("longestTerm"),// getValues("longestTerm"),
+getValues("adminFee"),
+  ).then((resp)=>{
+      console.log("BaseBid instance deployed and launched to ", resp)
+  })
       
-    //launch auction
-// console.log("COLLECTION ADDRESSS************************" ,  getValues("collectionAddress"))
-// const baseAssetAddress = USDC_ADDRESS
-//             const transaction = await contract.connect(signer).launch(
-//                 getValues("operatorAddress"),
-//                 getBaseAsset(getValues("baseAsset")),
-//                 getValues("collectionAddress"), //address of nft wrapped?
-//                 ethers.constants.AddressZero, //oracle address
-//                 getValues("nftId"), //nft_id 
-//                 start_time + 600,
-//                 end_time,
-//                 getValues("liquidatable"),
-//                 getValues("whitelisted")
-//             )
 
-           // await transaction.wait()
+
+
+
         }
     }
 
-    // constructor(
-    //     address _admin,
-    //     address _baseAsset,
-    //     address _baseAssetOracle,
-    //     address _LANContract,
-    //     bool _liquidationOnly,
-    //     uint256 _minAPR,
-    //     uint256 _longestTerm,
-    //     uint256 _adminFee
-    // ) {
+ 
     return (<div>
-
-
 
 
         <FormControl>
@@ -188,8 +161,12 @@ const baseAssetAddress = USDC_ADDRESS
 
                 <FormLabel as='legend'>Pool Name</FormLabel>
 
-                <Input type="text" placeholder="Pool 1" {...register("auctionName")} />
+                <Input type="text" placeholder="Pool 1" {...register("poolName")} />
                 <FormLabel as='legend'>Base Asset</FormLabel>
+  <Input type="text" placeholder="Pool 1" {...register("baseAssetAddress")} />
+                
+                <FormLabel as='legend'>Base Asset Oracle</FormLabel>
+                <Input type="text" placeholder="0x...." {...register("baseAssetOracle")} />
                 
                 <RadioGroup size="sm" defaultValue='USDC' {...register("baseAsset")}>
                     <HStack spacing='12px'>
@@ -199,11 +176,8 @@ const baseAssetAddress = USDC_ADDRESS
                     </HStack>
                 </RadioGroup>
 
-                <FormLabel as='legend'>Base Asset Oracle</FormLabel>
-                <Input type="text" placeholder="0x...." {...register("oracleAddress")} />
-
                 <FormLabel as='legend'>Max Term Duration</FormLabel>
-                <Select placeholder='Select Duration' {...register("auctionDuration")}>
+                <Select placeholder='Select Duration' {...register("longestTerm")}>
                     <option value='7'>7 days</option>
                     <option value='14'>14 days</option>
                     <option value='28'>28 days</option>
@@ -211,10 +185,15 @@ const baseAssetAddress = USDC_ADDRESS
 
                 <FormLabel as='legend'>Minimum APR</FormLabel>
                 {/* (wrapper or nft) */}
-                <Input type="text" placeholder="5%" {...register("minAPR")} />
+            
 
-                <FormLabel as='legend'>Admin fee</FormLabel>
-                <Input type="text" placeholder="1%" {...register("adminFee")} />
+                   <Input type="text" placeholder="Pool 1" {...register("minApr")} />
+                <FormLabel as='legend'>admin Fee</FormLabel>
+                <Input type="text" placeholder="5%" {...register("adminFee")} />
+
+                
+
+                 
 
                 
                 

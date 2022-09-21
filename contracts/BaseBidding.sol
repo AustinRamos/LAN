@@ -131,46 +131,46 @@ abstract contract BaseBidding  {
     /// @param _tokenAmount is amount deposited    
     function deposit(uint256 _tokenAmount) public virtual {}
     
-    // /// @notice Withdraw
-    // /// @param _tokenAmount is amount withdrawn 
-    // function withdraw(uint256 _tokenAmount) public virtual onlyOwner(){}
+    /// @notice Withdraw
+    /// @param _tokenAmount is amount withdrawn 
+    function withdraw(uint256 _tokenAmount) public virtual onlyOwner(){}
 
-    // /// @notice Add whitelist asset to vault
-    // /// @param _token is token address
-    // /// @param _LTV is the LTV of the asset
-    // /// @param _oracle is the oracle that will be queried. Oracle should implement IPriceOracle
-    // // function addWhitelist(uint246 _poolId, address _token, uint256 _LTV, address _oracle) public virtual onlyOwner(){}
+    /// @notice Add whitelist asset to vault
+    /// @param _token is token address
+    /// @param _LTV is the LTV of the asset
+    /// @param _oracle is the oracle that will be queried. Oracle should implement IPriceOracle
+    // function addWhitelist(uint246 _poolId, address _token, uint256 _LTV, address _oracle) public virtual onlyOwner(){}
     
 
-    // /// @notice Liquidate Auction if the auction can be liquidated.
-    // /// @param _poolId The pool ID
-    // function liquidateAuction(uint256 _poolId) public virtual {}
+    /// @notice Liquidate Auction if the auction can be liquidated.
+    /// @param _poolId The pool ID
+    function liquidateAuction(uint256 _poolId) public virtual {}
 
-    // /// @notice Call the LAN contract and make a bid with specific parameters. LTV is determined inclusive of accrued interest.
-    // /// Update utilization when the loan is issued.
-    // /// @param _poolId The pool ID
-    // /// @param _borrowAmount The amount requested to borrow
-    // /// @param _apr The APR for the borrow
-    // function bidWithParams(uint256 _poolId, uint256 _borrowAmount, uint256 _apr) public virtual {}
+    /// @notice Call the LAN contract and make a bid with specific parameters. LTV is determined inclusive of accrued interest.
+    /// Update utilization when the loan is issued.
+    /// @param _poolId The pool ID
+    /// @param _borrowAmount The amount requested to borrow
+    /// @param _apr The APR for the borrow
+    function bidWithParams(uint256 _poolId, uint256 _borrowAmount, uint256 _apr) public virtual {}
 
-    // function automaticBid(uint256 _poolId) public virtual {}
+    function automaticBid(uint256 _poolId) public virtual {}
     
-    // function pause() external virtual onlyOwner() {}
+    function pause() external virtual onlyOwner() {}
 
-    // /// @notice Sum the value of whitelisted assets contained in the NFT wrapper. Nonwhitelisted assets are 0.
-    // /// @param _poolId The pool ID
-    // function _calculateLTV(uint256 _poolId) internal virtual{}
+    /// @notice Sum the value of whitelisted assets contained in the NFT wrapper. Nonwhitelisted assets are 0.
+    /// @param _poolId The pool ID
+    function _calculateLTV(uint256 _poolId) internal virtual{}
 
-    // /// @notice Sum the value of whitelisted assets contained in the NFT wrapper. Nonwhitelisted assets are 0.
-    // /// @param _presentValue The loan amount
-    // /// @param _apr The APR of the loan
-    // /// @return futurevalue The final accrued value of the loan
-    // function _calculateLoanValue(uint256 _presentValue, uint256 _apr, uint256 _timeElapsed) public pure virtual returns(uint256) {
-    //     return
-    //         _presentValue +
-    //         _presentValue.mulDiv(_apr, 10e18).mulDiv(_timeElapsed, SECONDS_IN_ONE_YEAR);
+    /// @notice Sum the value of whitelisted assets contained in the NFT wrapper. Nonwhitelisted assets are 0.
+    /// @param _presentValue The loan amount
+    /// @param _apr The APR of the loan
+    /// @return futurevalue The final accrued value of the loan
+    function _calculateLoanValue(uint256 _presentValue, uint256 _apr, uint256 _timeElapsed) public pure virtual returns(uint256) {
+        return
+            _presentValue +
+            _presentValue.mulDiv(_apr, 10e18).mulDiv(_timeElapsed, SECONDS_IN_ONE_YEAR);
 
-    // }
+    }
      
     /// @notice Read LAN for Loan details
     /// @param _poolId The pool ID
