@@ -61,6 +61,7 @@ contract BaseBid3  {
         uint256 longestTerm;
         uint256 adminFee; //PUT MINAPR BACK IN...
         address baseBidRegistry;
+        uint256 public cash;
     constructor(
         address _baseBidRegistry,
         address _admin,
@@ -112,7 +113,6 @@ contract BaseBid3  {
                 longestTerm,
                 adminFee,
                 liquidationOnly
-
             );
 
     }
@@ -120,6 +120,7 @@ contract BaseBid3  {
  /// @notice Deposit
     /// @param _tokenAmount is amount deposited    
     function deposit(uint256 _tokenAmount) public {
+        cash+=_tokenAmount;
                 IERC20(baseAsset).transferFrom(msg.sender, address(this), _tokenAmount);
     }
     

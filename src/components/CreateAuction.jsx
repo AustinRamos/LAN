@@ -108,12 +108,7 @@ const [currAuctionName, setCurrAuctionName] = useState("")
             const timestamp = (await provider.getBlock("latest")).timestamp;
 
          
-            //will need a date thing for that
-            const start_time = Math.round(Date.now() / 1000)
-                const end_time= start_time+(86400*parseInt(getValues("auctionDuration")))
-            console.log("USDC ERROR : ", USDC_ADDRESS)
-            console.log("NEW START TIME", start_time)
-
+           
 
 
            
@@ -129,8 +124,16 @@ const [currAuctionName, setCurrAuctionName] = useState("")
             console.log("NFT SUCCESFULLY APPROVED, SHOULD BE SENT NOW")
                   //ideally the contract would emit an event bid rejected r bid accepted
             
+ //will need a date thing for that
+            const start_time = Math.round((Date.now() / 1000) + 500)
+                const end_time= start_time+(86400*parseInt(getValues("auctionDuration")))
+            console.log("USDC ERROR : ", USDC_ADDRESS)
+            console.log("NEW START TIME", start_time)
+
 
 console.log("COLLECTION ADDRESSS************************" ,  getValues("collectionAddress"))
+console.log("LAN CONTRACT: " , contract)
+console.log("LAN CONTRACT: " , contract)
 console.log("LAN CONTRACT: " , contract)
 const baseAssetAddress = USDC_ADDRESS
              contract.connect(signer).launch(
@@ -139,7 +142,7 @@ const baseAssetAddress = USDC_ADDRESS
                 getValues("oracleAddress"), //oracle address
                  getValues("collectionAddress"), 
                 getValues("nftId"), //nft_id 
-                start_time + 600,
+                start_time,
                 end_time,
                 getValues("liquidatable"),
                 getValues("whitelisted")

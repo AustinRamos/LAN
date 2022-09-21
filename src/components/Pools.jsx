@@ -134,7 +134,7 @@ currBaseBidContract.getDetails().then(resp=>{
   {/* <AuctionInfo nftAddress="" poolId={auctionId}></AuctionInfo> */}
         </h2>     
         {showPool  ?  
-        <PoolInfo></PoolInfo>
+        <PoolInfo poolAddress={poolBidId}></PoolInfo>
         :
   
 <div>
@@ -173,7 +173,8 @@ currBaseBidContract.getDetails().then(resp=>{
     <Td>
     <Button onClick={()=>{
       setShowPool(true)
-     setPoolBidId("test")} //address instead of id... 
+      console.log("POOL BID ADDY ", pool[0])
+     setPoolBidId(pool[0])} //address instead of id... 
      } >View</Button>
     </Td>
   </Tr>

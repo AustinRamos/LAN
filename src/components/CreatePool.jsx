@@ -128,10 +128,12 @@ console.log(ethers.utils.formatBytes32String(signer))
   console.log(signer)
   console.log("BASEBid Contract: " , BaseBid)
   console.log("BASEBIDREGISTRY_ADDRESS ", BASEBIDREGISTRY_ADDRESS)
+  console.log("account[0] ", accounts[0])
+  console.log(getBaseAsset(getValues("baseAsset")))
   BaseBid.connect(signer).deploy(
 BASEBIDREGISTRY_ADDRESS,
 accounts[0],
-getBaseAsset(getValues("baseAssetAddress")),
+getBaseAsset(getValues("baseAsset")),
 getValues("baseAssetOracle"),
 LAN_ADDRESS,
 WRAPPER_ADDRESS,
@@ -162,9 +164,6 @@ getValues("adminFee"),
                 <FormLabel as='legend'>Pool Name</FormLabel>
 
                 <Input type="text" placeholder="Pool 1" {...register("poolName")} />
-                <FormLabel as='legend'>Base Asset</FormLabel>
-  <Input type="text" placeholder="Pool 1" {...register("baseAssetAddress")} />
-                
                 <FormLabel as='legend'>Base Asset Oracle</FormLabel>
                 <Input type="text" placeholder="0x...." {...register("baseAssetOracle")} />
                 

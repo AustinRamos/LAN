@@ -60,7 +60,6 @@ import {
   import { LAN_ADDRESS, NFT_ADDRESS, USDC_ADDRESS,BASEBIDREGISTRY_ADDRESS } from '../constants'
   
   export default function PoolInfo(props) {
-console.log("POOLID: ",props.poolId)
 
 const { register, getValues, handleSubmit, formState: { errors } } = useForm();
 
@@ -103,79 +102,16 @@ const { register, getValues, handleSubmit, formState: { errors } } = useForm();
 const [currBidNum,setCurrBidNum] = useState(0)
 const [bids,setBids] = useState([])
 const [bestBid,setBestBid] = useState(null)
- useEffect(() => {
-
-//get best bid:
-
-
-    contract.loans(props.poolId).then(resp => {
-      console.log("BIDNUMS GOTTEN : ", resp[8].toNumber())
-      setCurrBidNum(resp[8].toNumber())
-      const bidNum = resp[8].toNumber()
-      //getbestBid
-      contract.bids(props.poolId,resp[8].toNumber()-1).then(resp=>{
-          setBestBid(bestBid)
-      })
-
-//OR currBidNum -1? 
-
-//SO IS 0th BID not actually real right?
-//lol embarrassing logic... 
-//if bid=>3 show last 3 bids.
-//if 2 show 2 bids.
-//if 1 show 1 bid...
-
-let val;
-if (bidNum>=3){
-    val=3
-}else if(bidNum==2){
-    val=2
-}else if(bidNum==1){
-    val=1;
-}else{
-    val=0
-}
-console.log("VAL*** ", val)
-
-      for (let i = bidNum-1; i >=bidNum-val; i--) {
-         
-       
  
-         contract.bids(props.poolId,i).then(resp => {
-     
-         
-           //setLoans(loans.concat(resp))
-           //setLoans([...loans, resp])
-          // setLoans(loans => [...loans, resp])
-            setBids(bids => [...bids, resp])
-            console.log("bids: " , bids)
-         })
-        }
-
- 
-
-      //console.log("LOANS: ", loans)
-
-    })
-
-
-  }, [])
-
- 
-
-
-    const bid = ()=>{
+    const deposit = ()=>{
 console.log("(**********")
-        console.log( getValues("bidAmount"))
-
-        console.log( getValues("bidApr"))
-        console.log( getValues("bidLtv"))
+        console.log( getValues("depositAmount"))
 
         
 //Approve bid
   const usdc = new ethers.Contract(USDC_ADDRESS,USDC.abi, signer)
         console.log("APROVED BID", usdc)
-        usdc.approve(LAN_ADDRESS,ethers.utils.parseUnits(getValues("bidAmount"), 18)).then(()=>{
+        usdc.approve(props.poolBidId.pool,ethers.utils.parseUnits(getValues("depositAmount"), 18)).then(()=>{
             
             console.log("SUCCESFULLY APPROVED TOKENS")
             //bid after apprval
@@ -201,26 +137,41 @@ console.log("(**********")
 
     
     return(<div>
+<VStack>
 
-    Total Assets Supplied:
-    
+<Flex>
+  Total Assets Supplied:</Flex>
+
+  <div>Minimum APR</div>
+<FormControl> 
+<form onSubmit={handleSubmit(deposit)}>
+{/* This could be what exactly just 1 asset can be supplied? */}
+<FormLabel as='legend'><Box>Your Assets Supplied:</Box></FormLabel>
+<Input type="text" placeholder="420 USDC" {...register("depositAmount")} />
+<Button type="submit" >Deposit</Button>
+</form>
+</FormControl>
+  <Flex>
 
 
-
-
-Auctions: 
-
+    <Button>Withdraw</Button>
+  </Flex>
+  <Box>
+  Current Auctions:
+  </Box>
+</VStack>
 <div>
 
 <Flex>
 
-
-
+<HStack>
+Auctions: 
+</HStack>
 </Flex>
 </div>
 
 
-</HStack>
+
 
     </div>)
   }

@@ -113,7 +113,7 @@ const [bestBid,setBestBid] = useState(null)
       setCurrBidNum(resp[8].toNumber())
       const bidNum = resp[8].toNumber()
       //getbestBid
-      contract.bids(props.poolId,resp[8].toNumber()-1).then(resp=>{
+      contract.bids(props.poolId,resp[8].toNumber()).then(resp=>{
           setBestBid(bestBid)
       })
 
