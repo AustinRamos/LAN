@@ -19,6 +19,15 @@ import "./IPriceOracle.sol";
 //     function getBundlePrice(address wrapper, uint256 nftId) external returns(uint256);
 // }
 
+// interface ILan{
+//      function bid(
+//         uint256 _poolId,
+//         uint256 _amount,
+//         uint256 _apr,
+//         uint16 _ltv
+//     );
+// }
+
 interface IWrapper {
     function getAmounts(uint256 _nftId)
         external
@@ -46,7 +55,7 @@ contract BaseBid3  {
     }
 
 
-    ILan private Lan; //insert deployment here
+    address private Lan; 
     IWrapper private  Wrapper;
 
 
@@ -91,7 +100,7 @@ contract BaseBid3  {
         //infinite token approval for LAN
         IERC20(baseAsset).approve(_LANContract, type(uint256).max);
         Wrapper = IWrapper(_Wrapper);
-       Lan = ILan(_LANContract);
+       Lan = _LANContract;
        Base_Bid_Registry(_baseBidRegistry).addBaseBid(address(this));
     }
 
@@ -123,10 +132,28 @@ contract BaseBid3  {
         cash+=_tokenAmount;
                 IERC20(baseAsset).transferFrom(msg.sender, address(this), _tokenAmount);
     }
+
+      function bid(uint256 _poolId) external {
+
+          ILan(LANContract).bid(_poolId,25000,20,0);
+        //cash-=_tokenAmount;
+               // IERC20(baseAsset).transferFrom(msg.sender, address(this), _tokenAmount);
+    }
     
     /// @notice Withdraw
     /// @param _tokenAmount is amount withdrawn 
     function withdraw(uint256 _tokenAmount) public onlyOwner(){}
+
+    //     /// @notice Call the LAN contract and make a bid with specific parameters. LTV is determined inclusive of accrued interest.
+//     /// Update utilization when the loan is issued.
+//     /// @param _poolId The pool ID
+//     /// @param _borrowAmount The amount requested to borrow
+//     /// @param _apr The APR for the borrow
+     function bidWithParams(uint256 _poolId, uint256 _borrowAmount, uint256 _apr) public   {
+        // _LANCONTRACT
+        ILan(Lan).bid(_poolId,_borrowAmount,_apr,0);
+     }
+
 
 //     /// @notice Add whitelist asset to vault
 //     /// @param _token is token address
@@ -139,12 +166,6 @@ contract BaseBid3  {
 //     /// @param _poolId The pool ID
 //     function liquidateAuction(uint256 _poolId) public virtual override {}
 
-//     /// @notice Call the LAN contract and make a bid with specific parameters. LTV is determined inclusive of accrued interest.
-//     /// Update utilization when the loan is issued.
-//     /// @param _poolId The pool ID
-//     /// @param _borrowAmount The amount requested to borrow
-//     /// @param _apr The APR for the borrow
-//     function bidWithParams(uint256 _poolId, uint256 _borrowAmount, uint256 _apr) public virtual override {}
 
 //    // function automaticBid(uint256 _poolId) public virtual {}
     
@@ -153,6 +174,4 @@ contract BaseBid3  {
 //     /// @notice Sum the value of whitelisted assets contained in the NFT wrapper. Nonwhitelisted assets are 0.
 //     /// @param _poolId The pool ID
 //     function _calculateLTV(uint256 _poolId) internal virtual override{}
-
-  
 }

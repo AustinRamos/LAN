@@ -69,6 +69,7 @@ await wrapper.deployed();
 
   console.log("deployed nft: ",nftFactory.address)
     await nftFactory.connect(nft_holder).mint(0)
+      await nftFactory.connect(owner).mint(1)
 
   //now need to send nft to dotenv of accnt 10
   //const res = await nftFactory.connect(owner).createToken("test");

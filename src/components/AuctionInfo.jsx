@@ -32,7 +32,8 @@ import {
     Th,
     Tbody,
     LinkBox,
-    LinkOverlay
+    LinkOverlay,
+    Spacer
   } from '@chakra-ui/react';
 
   
@@ -162,7 +163,7 @@ console.log("VAL*** ", val)
   }, [])
 
  
-
+const [makeBid,setMakeBid] = useState(false)
 
     const bid = ()=>{
 console.log("(**********")
@@ -183,8 +184,12 @@ console.log("(**********")
             props.poolId,
             ethers.utils.parseUnits(getValues("bidAmount"), 18),
             getValues("bidApr"),
-            getValues("bidLtv")
-                  ).then((resp)=>console.log("BID COMPLETE"))
+            0,// getValues("bidLtv") assuming 0 LTV non liquidatable
+                  ).then((resp)=>{console.log("BID COMPLETE" , resp)
+                  setMakeBid(true)
+                  
+                  })
+
 
                   //ideally the contract would emit an event bid rejected r bid accepted
             
@@ -201,7 +206,7 @@ console.log("(**********")
 
     
     return(<div>
-
+<Flex>
         <VStack>
         <Box boxSize='sm'>
   <Image src='https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2021%2F10%2Fbored-ape-yacht-club-nft-3-4-million-record-sothebys-metaverse-0.jpg?w=960&cbr=1&q=90&fit=max' alt='' />
@@ -209,33 +214,34 @@ console.log("(**********")
     Current best bid:
        <getBestBid/>
 
-</Box>
 
 
 
 
-<div>
-Make a bid
+
+
+
 <FormControl> 
 <form onSubmit={handleSubmit(bid)}>
 {/* This could be what exactly just 1 asset can be supplied? */}
 <FormLabel as='legend'>Bid Amount</FormLabel>
-<Input type="text" placeholder="420 USDC" {...register("bidAmount")} />
+<Input type="text" placeholder="1000 USDC" {...register("bidAmount")} />
 <FormLabel as='legend'>APR</FormLabel>
-<Input type="text" placeholder="69%" {...register("bidApr")} />
-<FormLabel as='legend'>LTV</FormLabel>
-<Input type="text" placeholder="30%" {...register("bidLtv")} />
-<Button type="submit" >Bid</Button>
+<Input type="text" placeholder="20%" {...register("bidApr")} />
+{/* <FormLabel as='legend'>LTV</FormLabel>
+<Input type="text" placeholder="30%" {...register("bidLtv")} /> */}
+<Button colorScheme='blue' type="submit" >Bid</Button>
 </form>
 </FormControl>
-</div>
+
+</Box>
 </VStack>
-<HStack>
+ <Spacer />
 {/* SHOW BIDS LOGIC ****************** */}
 
-<div>
+<VStack>
 <p>Recent Bids:</p>
-<Flex>
+
 
 <TableContainer maxWidth="100%" size="lg">
 <Table variant='striped'size="lg" maxWidth="100%">
@@ -245,7 +251,7 @@ Make a bid
 <Th>Bidder</Th>
 <Th>Amount</Th>
 <Th> Apr </Th>
-<Th> LTV </Th>
+{/* <Th> LTV </Th> */}
 
 
 </Tr>
@@ -266,9 +272,9 @@ Make a bid
     <Td>
       {bid.apr.toNumber()}%
     </Td>
-    <Td>
+    {/* <Td>
       {bid.ltv}%
-    </Td>
+    </Td> */}
     <Td>
      {/* {getdate(loan.time[1].toNumber())}  */}
 
@@ -286,12 +292,14 @@ Make a bid
 </Table>
 
 </TableContainer>
+</VStack>
+
 
 </Flex>
 </div>
 
 
-</HStack>
 
-    </div>)
+ )
+
   }

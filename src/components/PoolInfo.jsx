@@ -140,25 +140,23 @@ console.log("(**********")
 <VStack>
 
 <Flex>
-  Total Assets Supplied:</Flex>
+  Total Assets Supplied: 25000 USDC</Flex>
 
-  <div>Minimum APR</div>
+  <div>Minimum APR: 10%</div>
 <FormControl> 
 <form onSubmit={handleSubmit(deposit)}>
 {/* This could be what exactly just 1 asset can be supplied? */}
-<FormLabel as='legend'><Box>Your Assets Supplied:</Box></FormLabel>
-<Input type="text" placeholder="420 USDC" {...register("depositAmount")} />
-<Button type="submit" >Deposit</Button>
+<FormLabel as='legend'><Box>Your Assets Supplied: 25000 USDC</Box></FormLabel>
+<Input type="text"   placeholder="5000 USDC" {...register("depositAmount")} />
+<Button colorScheme='blue' type="submit" >Deposit</Button>
 </form>
 </FormControl>
   <Flex>
 
 
-    <Button>Withdraw</Button>
+    <Button colorScheme='blue'>Withdraw</Button>
   </Flex>
-  <Box>
-  Current Auctions:
-  </Box>
+
 </VStack>
 <div>
 

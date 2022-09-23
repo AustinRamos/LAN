@@ -51,7 +51,7 @@ export default function CreatePool(props) {
     const { register, getValues, handleSubmit, formState: { errors } } = useForm();
 
 const [currAuctionName, setCurrAuctionName] = useState("")
-
+const [createPoolRender,setCreatePoolRender] = useState("USDC");
     async function requestAccount() {
         await window.ethereum.request({ method: 'eth_requestAccounts' });
     }
@@ -98,6 +98,7 @@ const [currAuctionName, setCurrAuctionName] = useState("")
         //     const signer = provider.getSigner()
         //     const contract = new ethers.Contract(LAN_ADDRESS, LAN.abi, signer)
 
+console.log("CREATEPOOL************** ")
             if (typeof window.ethereum !== 'undefined' || (typeof window.web3 !== 'undefined')) {
 
     // Web3 browser user detected. You can now use the provider.
@@ -129,20 +130,22 @@ console.log(ethers.utils.formatBytes32String(signer))
   console.log("BASEBid Contract: " , BaseBid)
   console.log("BASEBIDREGISTRY_ADDRESS ", BASEBIDREGISTRY_ADDRESS)
   console.log("account[0] ", accounts[0])
-  console.log(getBaseAsset(getValues("baseAsset")))
+console.log("TEST CREATE POOLRENDER ", createPoolRender)
+
   BaseBid.connect(signer).deploy(
 BASEBIDREGISTRY_ADDRESS,
 accounts[0],
-getBaseAsset(getValues("baseAsset")),
-getValues("baseAssetOracle"),
+getBaseAsset(createPoolRender),
+accounts[0], //default should be chainlink oracle. for demo just random account...
 LAN_ADDRESS,
 WRAPPER_ADDRESS,
 getValues("liquidationOnly"),
 20, //default value for kink...
 getValues("minApr"),
-getValues("longestTerm"),// getValues("longestTerm"),
+0,// getValues("longestTerm"),
 getValues("adminFee"),
   ).then((resp)=>{
+
       console.log("BaseBid instance deployed and launched to ", resp)
   })
       
@@ -164,31 +167,28 @@ getValues("adminFee"),
                 <FormLabel as='legend'>Pool Name</FormLabel>
 
                 <Input type="text" placeholder="Pool 1" {...register("poolName")} />
-                <FormLabel as='legend'>Base Asset Oracle</FormLabel>
-                <Input type="text" placeholder="0x...." {...register("baseAssetOracle")} />
-                
-                <RadioGroup size="sm" defaultValue='USDC' {...register("baseAsset")}>
+                <RadioGroup size="sm" defaultValue='USDC'  >
                     <HStack spacing='12px'>
-                        <Radio value='USDC'  >USDC</Radio>
-                             <Radio size="sm" value='FRAX' >FRAX</Radio>
-                             <Radio value='WETH'  >WETH</Radio>
+                        <Radio value='USDC' onClick={() =>{
+                        console.log("CREATEPOOL USDC")
+                        setCreatePoolRender("USDC")}} >USDC</Radio>
+                             <Radio size="sm" value='FRAX' onClick={() =>setCreatePoolRender("FRAX")}>FRAX</Radio>
+                             <Radio value='WETH' onClick={() =>setCreatePoolRender("WETH")}>WETH</Radio>
                     </HStack>
                 </RadioGroup>
 
-                <FormLabel as='legend'>Max Term Duration</FormLabel>
+                {/* <FormLabel as='legend'>Max Term Duration</FormLabel>
                 <Select placeholder='Select Duration' {...register("longestTerm")}>
                     <option value='7'>7 days</option>
                     <option value='14'>14 days</option>
                     <option value='28'>28 days</option>
-                </Select>
+                </Select> */}
 
                 <FormLabel as='legend'>Minimum APR</FormLabel>
                 {/* (wrapper or nft) */}
-            
-
-                   <Input type="text" placeholder="Pool 1" {...register("minApr")} />
-                <FormLabel as='legend'>admin Fee</FormLabel>
-                <Input type="text" placeholder="5%" {...register("adminFee")} />
+                   <Input type="text" placeholder="10%" {...register("minApr")} />
+                <FormLabel as='legend'>Admin Fee</FormLabel>
+                <Input type="text" placeholder="1%" {...register("adminFee")} />
 
                 
 
@@ -196,7 +196,7 @@ getValues("adminFee"),
 
                 
                 
-                <Checkbox {...register("liquidationOnly")}> liquidation only?
+                <Checkbox {...register("liquidationOnly")}> liquidation enabled auctions only?
                 </Checkbox>
 
                 
@@ -239,10 +239,11 @@ getValues("adminFee"),
 
 
 <Flex>
-                <Button type="submit" > Create Pool</Button>
+                <Button colorScheme='blue' type="submit" > Create Pool</Button>
                 </Flex>
             </form>
         </FormControl>
     </div>
     );
 }
+

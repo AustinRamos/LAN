@@ -7,6 +7,8 @@
     "@chakra-ui/react": "^2.3.2",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@fontsource/open-sans": "^4.5.11",
+    "@fontsource/raleway": "^4.5.10",
     "@nomiclabs/hardhat-waffle": "^2.0.3",
     "@openzeppelin/contracts": "^4.7.3",
     "@testing-library/jest-dom": "^5.16.5",

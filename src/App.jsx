@@ -250,10 +250,16 @@ function App() {
   };
 
   return (
+<div >
+  
     <Flex
+       bg="#f9f4e7"
+       width='100%'
+
       align={'center'}
       justify={'center'}
-      bg={useColorModeValue('gray.70', 'gray.5800')}
+      // bg={useColorModeValue('gray.70', 'gray.5800')}
+    
     >
 
       <Box textAlign="center" minW={'100vw'} overflowY="auto">
@@ -265,7 +271,8 @@ function App() {
 
         </Grid>
 
-        <Container>
+        <Container  height='1000px'
+     bg="#f9f4e7">
 
           <DashboardHeader></DashboardHeader>
 
@@ -302,11 +309,10 @@ function App() {
         <Stack spacing={8} mx={'auto'} w={['90vw', 450, 550]} py={12} px={6}>
           <Stack pt={50} align={'center'}>
           </Stack>
-
         </Stack>
       </Box>
     </Flex>
-
+</div>
   );
 }
 

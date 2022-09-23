@@ -148,7 +148,9 @@ const handleClick = ()=>{
   console.log("ROW CLICKED")
 }
   const getdate = (timestamp)=>{
-      return new Date(Math.round(timestamp*1000)).toLocaleString()
+    const dt = new Date(Math.round(timestamp*1000))
+    const str = dt.getFullYear() + "/" + (dt.getMonth() + 1) + "/" + dt.getDate()
+      return str
   }
   return (
   <div>
@@ -161,11 +163,11 @@ const handleClick = ()=>{
         :
   
 <div>
-<p>Existing Auctions:</p>
-<Flex>
 
-<TableContainer maxWidth="100%" size="lg">
-<Table variant='striped'size="lg" maxWidth="100%">
+<Flex width='700px'>
+
+<TableContainer  bg="white" maxWidth="100%" maxHeight='100%' whiteSpace='normal' size="lg">
+<Table  bg="white" variant='striped' maxWidth='100%'>
 {/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
 <Thead>
 <Tr>
@@ -174,6 +176,7 @@ const handleClick = ()=>{
 <Th> Bids </Th>
 <Th> Apr </Th>
 <Th> End Time </Th>
+<Th>  </Th>
 
 </Tr>
 </Thead>
@@ -183,7 +186,7 @@ const handleClick = ()=>{
 
   <Tr key = {loan.poolId}onClick={handleClick()}>
     <Td>
-      {loan[0].substring(0,7)}...
+      {loan[0].substring(0,6)}..
       
     </Td>
     <Td>
@@ -200,7 +203,7 @@ const handleClick = ()=>{
 
     </Td>
     <Td>
-    <Button onClick={()=>{setShowAuction(true)
+    <Button size='sm' colorScheme='blue' onClick={()=>{setShowAuction(true)
      setAuctionId(loan[11].toNumber())}} >View</Button>
     </Td>
   </Tr>
@@ -214,22 +217,6 @@ const handleClick = ()=>{
 </TableContainer>
 
 </Flex>
-
-    Number of Auctions:
-    {count}
-    {     console.log("loans** ", loans)
-        }
-        {          console.log("count**" , count)
-}
-    <ul>
-      {/* {
-        loans.map(loan =>
-               // console.log("loan in react return " , loan)
-          <li key={loan[8].toNumber()}>end time: {getdate(loan[8].toNumber())}</li>
-
-       
-        )} */}
-    </ul>
   </div>
   }
   </div>)

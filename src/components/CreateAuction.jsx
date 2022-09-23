@@ -35,20 +35,26 @@ import { constants, ethers } from 'ethers'
 import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 import LAN from '../artifacts/contracts/mainliquidations.sol/LAN.json'
 import NFT from '../artifacts/contracts/SimpleNft.sol/SimpleNft.json'
+import BaseBidRegistry from '../artifacts/contracts/BaseBidRegistry.sol/BaseBidRegistry.json'
+import USDC from '../artifacts/contracts/USDC.sol/USDC.json'
 
 import { useEffect, useState } from 'react'
+import BaseBid3 from '../artifacts/contracts/BaseBid3.sol/BaseBid3.json'
+
+
 
 import Logo from '../assets/logo.png';
 import MetaLogo from '../assets/metamask.svg';
 
-import { LAN_ADDRESS, NFT_ADDRESS, USDC_ADDRESS,FRAX_ADDRESS } from '../constants'
+import { LAN_ADDRESS, NFT_ADDRESS, USDC_ADDRESS,FRAX_ADDRESS,BASEBIDREGISTRY_ADDRESS } from '../constants'
 
 export default function CreateAuction(props) {
 
     const { register, getValues, handleSubmit, formState: { errors } } = useForm();
 
 const [currAuctionName, setCurrAuctionName] = useState("")
-
+const [AuctionCreate,setAuctionCreate] = useState(false)
+const [value,setValue] = useState("")
     async function requestAccount() {
         await window.ethereum.request({ method: 'eth_requestAccounts' });
     }
@@ -124,8 +130,10 @@ const [currAuctionName, setCurrAuctionName] = useState("")
             console.log("NFT SUCCESFULLY APPROVED, SHOULD BE SENT NOW")
                   //ideally the contract would emit an event bid rejected r bid accepted
             
- //will need a date thing for that
+
             const start_time = Math.round((Date.now() / 1000) + 500)
+
+
                 const end_time= start_time+(86400*parseInt(getValues("auctionDuration")))
             console.log("USDC ERROR : ", USDC_ADDRESS)
             console.log("NEW START TIME", start_time)
@@ -135,23 +143,50 @@ console.log("COLLECTION ADDRESSS************************" ,  getValues("collecti
 console.log("LAN CONTRACT: " , contract)
 console.log("LAN CONTRACT: " , contract)
 console.log("LAN CONTRACT: " , contract)
+
 const baseAssetAddress = USDC_ADDRESS
+
              contract.connect(signer).launch(
-                getValues("operatorAddress"),
+                USDC_ADDRESS,// getValues("operatorAddress"), ARBITRARY DDRESS NO OPERATOR
                 getBaseAsset(getValues("baseAsset")),
-                getValues("oracleAddress"), //oracle address
+                USDC_ADDRESS,// arbiitrary address... no oracle getValues("oracleAddress"), //oracle address
                  getValues("collectionAddress"), 
                 getValues("nftId"), //nft_id 
                 start_time,
                 end_time,
                 getValues("liquidatable"),
                 getValues("whitelisted")
-            )
+            ).then(()=>{
+                console.log("auction created ")
+                setAuctionCreate(true)
+
+
+                //HAVE TO MAKE it CALL BASEBID 3... think about how?
+                //so sort of simple, has to call basebidregistry get count=0...
+            //     const basebidRegistry = new ethers.Contract(BASEBIDREGISTRY_ADDRESS,BaseBidRegistry.abi, signer)
+            //     basebidRegistry.getBaseBids(0).then((resp)=>{
+            //                 console.log("BASEBIDPOOL: " , resp)
+
+            //             const basebidcontract =  new ethers.Contract(resp,BaseBid3.abi, signer)
+            //             basebidcontract.bid(0) //should be pool id...
+            //     })
+            // })
 
 
 
+        //     const contract1=new ethers.Contract(LAN_ADDRESS, LAN.abi, newsigner)
+        //         //lol: just for demo: 
+        //         const usdcapproval = new ethers.Contract(USDC_ADDRESS,USDC.abi,newsigner)
+               
+        // usdcapproval.approve(LAN_ADDRESS,ethers.utils.parseUnits("25000", 18)).then(()=>{
+        //             console.log("USDC APPROVED FOR FIRST BID")
+        //         contract1.bid(0, ethers.utils.parseUnits("25000", 18),20,0).then(resp=>{
+        //             console.log("BID Auto made on auction launch")
+        //         })
+        // })
 
             })
+        })
 
 
       
@@ -182,21 +217,21 @@ const baseAssetAddress = USDC_ADDRESS
             <form onSubmit={handleSubmit(createPool)}>
                 {/* Will this chakra input work instead of input regular */}
 
-                <FormLabel as='legend'>Auction Name</FormLabel>
+                {/* <FormLabel as='legend'>Auction Name</FormLabel>
 
-                <Input type="text" placeholder="Auction 1" {...register("auctionName")} />
+                <Input type="text" placeholder="Auction 1" {...register("auctionName")} /> */}
                 <FormLabel as='legend'>Base Asset</FormLabel>
                 
-                <RadioGroup size="sm" defaultValue='USDC' {...register("baseAsset")}>
+                <RadioGroup size="sm" defaultValue='USDC' >
                     <HStack spacing='12px'>
-                        <Radio value='USDC'  >USDC</Radio>
-                             <Radio size="sm" value='FRAX' >FRAX</Radio>
-                             <Radio value='WETH'  >WETH</Radio>
+                        <Radio value='USDC'  {...register("baseAsset")}>USDC</Radio>
+                             <Radio  value='FRAX' {...register("baseAsset")}>FRAX</Radio>
+                             <Radio value='WETH' {...register("baseAsset")} >WETH</Radio>
                     </HStack>
                 </RadioGroup>
 
-                <FormLabel as='legend'>Operator</FormLabel>
-                <Input type="text" placeholder="0x...." {...register("operatorAddress")} />
+                {/* <FormLabel as='legend'>Operator</FormLabel>
+                <Input type="text" placeholder="0x...." {...register("operatorAddress")} /> */}
 
                 <FormLabel as='legend'>Max Auction Duration</FormLabel>
                 <Select placeholder='Select Duration' {...register("auctionDuration")}>
@@ -205,9 +240,9 @@ const baseAssetAddress = USDC_ADDRESS
                     <option value='28'>28 days</option>
                 </Select>
 
-                <FormLabel as='legend'>Oracle Address</FormLabel>
+                {/* <FormLabel as='legend'>Oracle Address</FormLabel>
                 {/* (wrapper or nft) */}
-                <Input type="text" placeholder="0x...." {...register("oracleAddress")} />
+                {/* <Input type="text" placeholder="0x...." {...register("oracleAddress")} /> */} 
 
                 <FormLabel as='legend'>Collection Address</FormLabel>
                 <Input type="text" placeholder="0x...." {...register("collectionAddress")} />

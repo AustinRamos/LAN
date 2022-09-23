@@ -29,7 +29,7 @@ contract SimpleNft is ERC721, Ownable {
     mapping(uint256 => string) imageUrls;
     mapping(uint256 => address) idToOwner;
 
-    constructor() ERC721("BLOCKPARTY", "PARTY") {
+    constructor() ERC721("Bored Ape", "BAYC") {
 
         //AND HAVE TO SET THIS SO IT DEPENDS ON THE ID GIVEN
         setHiddenMetadataUri("https://gateway.pinata.cloud/ipfs/QmdHM2Sq23sbrzijjyownQLTHCjpe59itp9RA1DtpbYQ4i");

@@ -57,7 +57,7 @@ import Logo from '../assets/logo.png';
 import MetaLogo from '../assets/metamask.svg';
 import AuctionInfo from '../components/AuctionInfo'
 import PoolInfo from './PoolInfo'
-import { LAN_ADDRESS, NFT_ADDRESS, USDC_ADDRESS,BASEBIDREGISTRY_ADDRESS } from '../constants'
+import { LAN_ADDRESS, NFT_ADDRESS, USDC_ADDRESS,BASEBIDREGISTRY_ADDRESS, FRAX_ADDRESS} from '../constants'
 
 
 //process.env.LAN_ADDRESS
@@ -80,7 +80,14 @@ const [poolsInfo,setPoolsInfo] = useState([])
 
   //************ */
    const contract = new ethers.Contract(BASEBIDREGISTRY_ADDRESS, BaseBidRegistry.abi, signer)
- 
+    const getBaseAsset = (address)=>{
+        if(address===FRAX_ADDRESS){
+            return "FRAX";
+        }
+        if(address===USDC_ADDRESS){
+            return "USDC"
+        }
+    }
 console.log ("CONTRACT: ", contract)
   useEffect(() => {
 
@@ -98,9 +105,14 @@ console.log ("CONTRACT: ", contract)
 
            //get current basebid contract 
      const currBaseBidContract = new ethers.Contract(resp, BaseBid.abi, signer)
-currBaseBidContract.getDetails().then(resp=>{
-  console.log("DETAILS ", resp)
-  setPoolsInfo(poolsInfo => [...poolsInfo, resp])
+currBaseBidContract.getDetails().then(resp2=>{
+  console.log("DETAILS ", resp2)
+    console.log("RESP ADDRESS ", resp)
+    //add on the basebid address into basebidpool info
+ 
+
+  //resp2.push(resp)
+  setPoolsInfo(poolsInfo => [...poolsInfo, resp2])
 })
 
 
@@ -138,17 +150,18 @@ currBaseBidContract.getDetails().then(resp=>{
         :
   
 <div>
-<p>Existing Pools:</p>
-<Flex>
+Pools:
+<Flex width='600px'>
 
-<TableContainer maxWidth="100%" size="lg">
-<Table variant='striped'size="lg" maxWidth="100%">
+<TableContainer  size="lg">
+<Table variant='striped'size="lg" >
 {/* <TableCaption>Imperial to metric conversion factors</TableCaption> */}
 <Thead>
 <Tr>
 <Th>Admin</Th>
 <Th>Token</Th>
 <Th> Min Apr </Th>
+
 
 </Tr>
 </Thead>
@@ -162,7 +175,7 @@ currBaseBidContract.getDetails().then(resp=>{
       
     </Td>
     <Td>
-      USDC 
+      {getBaseAsset(pool[1]) }
     </Td>
     <Td>
         {pool[2].toNumber()}%
@@ -171,7 +184,7 @@ currBaseBidContract.getDetails().then(resp=>{
       {/* {loan[5].toNumber()}% */}
     </Td>
     <Td>
-    <Button onClick={()=>{
+    <Button colorScheme='blue' onClick={()=>{
       setShowPool(true)
       console.log("POOL BID ADDY ", pool[0])
      setPoolBidId(pool[0])} //address instead of id... 

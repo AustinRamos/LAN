@@ -62,13 +62,12 @@ import { useEffect, useState } from 'react'
 
 
     return (
-    //INSTEAD OF DIV COULD DO VSTACK OR SOMETHING...
     <div>
-      Your Auctions:
+      My Auctions:
 
 
 
-            {/* <TableContainer > */}
+       
      
 
 
