@@ -10,6 +10,10 @@ module.exports = {
     hardhat: {
       chainId: 31337
     },
+    goerli: {
+      url: `https://eth-goerli.alchemyapi.io/v2/OTKd2wL3g6nUyu7id7-cTSqx9p-a_LqR`,
+      accounts: ['bdc74df63963d0a70b5d1d42eb671b6c4cd5deb5d871fa79eef3a24e23145fe2','b9309cc127a7a3a7190fa75f5eb81277bef3bc37c5c007c56a09cd620e45cf78']
+    },
     forking: {
        enabled: true,
       url: "https://eth-mainnet.alchemyapi.io/v2/l5p8SCZIY8Mn3xdCoeVBnQSygaSJntig",
