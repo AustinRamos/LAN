@@ -31,7 +31,7 @@ typechain-types
 
 #Hardhat files
 cache
-artifacts
+#artifacts
 
 
 node_modules
@@ -43,7 +43,7 @@ typechain-types
 
 #Hardhat files
 cache
-artifacts
+#artifacts
 
 
 node_modules
@@ -55,7 +55,7 @@ typechain-types
 
 #Hardhat files
 cache
-artifacts
+#artifacts
 
 
 node_modules
@@ -67,7 +67,7 @@ typechain-types
 
 #Hardhat files
 cache
-artifacts
+#artifacts
 
 
 node_modules
@@ -79,7 +79,7 @@ typechain-types
 
 #Hardhat files
 cache
-artifacts
+#artifacts
 
 
 node_modules
@@ -91,5 +91,5 @@ typechain-types
 
 #Hardhat files
 cache
-artifacts
-hardhat.config.js
+#artifacts
+#hardhat.config.js
