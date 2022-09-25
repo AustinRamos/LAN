@@ -29,10 +29,15 @@ contract SimpleNft is ERC721, Ownable {
     mapping(uint256 => string) imageUrls;
     mapping(uint256 => address) idToOwner;
 
-    constructor() ERC721("Bored Ape", "BAYC") {
+    constructor() ERC721("SimpleNFT", "sNFT") {
 
         //AND HAVE TO SET THIS SO IT DEPENDS ON THE ID GIVEN
         setHiddenMetadataUri("https://gateway.pinata.cloud/ipfs/QmdHM2Sq23sbrzijjyownQLTHCjpe59itp9RA1DtpbYQ4i");
+        imageUrls[0]="https://bafkreic7x2ig66xkb2iuqaio5vvlswhtlfjf3z35zs4nmum3x5y62yzdfm.ipfs.nftstorage.link/";
+        imageUrls[1]="https://bafkreihdatoafdtbfopzf6zih4qwu76jdufgxhmymdsxk76pmx4kdz7i64.ipfs.nftstorage.link/";
+        imageUrls[2]="https://bafkreifuek4nrpl2v64o7hzou2ch5xlgjthzygawr6ix5erw4lsuzt3jxm.ipfs.nftstorage.link/";
+        imageUrls[2]="https://bafkreihlnkvmbfbwzoya733vkvdo3inolj4qjzkr4p2mtlcxhcwr4uzvhi.ipfs.nftstorage.link/";
+       imageUrls[3]="https://bafkreibi4bwsrn5hjcv42wst6soqjxwlroue37hdblglqwvmjbeaa6pobe.ipfs.nftstorage.link/";
     }
 
     modifier mintCompliance(uint256 _mintAmount) {
@@ -115,14 +120,18 @@ contract SimpleNft is ERC721, Ownable {
             "ERC721Metadata: URI query for nonexistent token"
         );
 
-        if (revealed == false) {
-            return hiddenMetadataUri;
-        }
+        // if (revealed == false) {
+        //     return hiddenMetadataUri;
+        // }
 
-        string memory currentBaseURI = _baseURI();
-        return bytes(currentBaseURI).length > 0
-        ? string(abi.encodePacked(currentBaseURI, _tokenId.toString(), uriSuffix))
-        : "";
+        // string memory currentBaseURI = _baseURI();
+        // return bytes(currentBaseURI).length > 0
+        // ? string(abi.encodePacked(currentBaseURI, _tokenId.toString(), uriSuffix))
+        // : "";
+
+return imageUrls[_tokenId];
+
+
     }
 
     function setRevealed(bool _state) public onlyOwner {

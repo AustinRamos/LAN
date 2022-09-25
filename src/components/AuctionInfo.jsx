@@ -48,6 +48,7 @@ import {
   //import Jazzicon from 'react-jazzicon';
   import LAN from '../artifacts/contracts/mainliquidations.sol/LAN.json'
     import USDC from '../artifacts/contracts/USDC.sol/USDC.json'
+    import SimpleNft from '../artifacts/contracts/SimpleNft.sol/SimpleNft.json'
 
   //   import { ColorModeSwitcher } from './ColorModeSwitcher';
   
@@ -104,13 +105,24 @@ const { register, getValues, handleSubmit, formState: { errors } } = useForm();
 const [currBidNum,setCurrBidNum] = useState(0)
 const [bids,setBids] = useState([])
 const [bestBid,setBestBid] = useState(null)
+const [nftUrl,setNftUrl] = useState("")
  useEffect(() => {
 
 //get best bid:
-
+      
 
     contract.loans(props.poolId).then(resp => {
       console.log("BIDNUMS GOTTEN : ", resp[8].toNumber())
+     
+    
+//get nft url
+  const nftContract = new ethers.Contract(NFT_ADDRESS,SimpleNft.abi,signer);
+  //UPDATE WITH NFTID
+  nftContract.tokenURI(resp.nftId).then(resp=>{
+    console.log("GOT TOKEN URI for 0 : " , resp)
+    setNftUrl(resp)
+  })
+
       setCurrBidNum(resp[8].toNumber())
       const bidNum = resp[8].toNumber()
       //getbestBid
@@ -187,7 +199,7 @@ console.log("(**********")
             0,// getValues("bidLtv") assuming 0 LTV non liquidatable
                   ).then((resp)=>{console.log("BID COMPLETE" , resp)
                   setMakeBid(true)
-                  
+
                   })
 
 
@@ -209,7 +221,7 @@ console.log("(**********")
 <Flex>
         <VStack>
         <Box boxSize='sm'>
-  <Image src='https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2021%2F10%2Fbored-ape-yacht-club-nft-3-4-million-record-sothebys-metaverse-0.jpg?w=960&cbr=1&q=90&fit=max' alt='' />
+  <Image src={nftUrl} alt='' />
 
     Current best bid:
        <getBestBid/>

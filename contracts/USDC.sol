@@ -12,5 +12,9 @@ constructor(uint256 initialSupply) ERC20("USDC", "USDC") {
         _mint(msg.sender, initialSupply);
     }
 
+    function mint () public {
+        _mint(msg.sender,10000);
+    }
+
 
 }

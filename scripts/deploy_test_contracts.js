@@ -4,7 +4,7 @@ const { ethers } = require("hardhat");
 const hre = require("hardhat");
 
 async function main() {
-    const [owner,nft_holder] = await ethers.getSigners();
+    const [owner,nft_holder,nft_holder2,nft_holder3] = await ethers.getSigners();
 
   const NFT_Factory = await hre.ethers.getContractFactory("SimpleNft");
   const nftFactory = await NFT_Factory.deploy();
@@ -30,9 +30,11 @@ async function main() {
   console.log("deployed nft: ",nftFactory.address)
     await nftFactory.connect(nft_holder).mint(0)
       await nftFactory.connect(owner).mint(1)
+     await nftFactory.connect(nft_holder2).mint(2)
+          await nftFactory.connect(nft_holder3).mint(3)
 
-
-
+await usdc.connect(nft_holder).mint()
+await usdc.connect(nft_holder2).mint()
   
 }
 

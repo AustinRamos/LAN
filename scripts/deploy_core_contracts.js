@@ -34,7 +34,7 @@ await basebidregistry.deployed();
 
 // await wrapper.deployed();
 
-  const [owner,nft_holder] = await ethers.getSigners();
+  //const [owner,nft_holder] = await ethers.getSigners();
 
 
    console.log(`deployed LAN contract to ${lan.address}`)
