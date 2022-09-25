@@ -30,6 +30,7 @@ async function main() {
   console.log("deployed nft: ",nftFactory.address)
     await nftFactory.connect(owner).mint(0)
       await nftFactory.connect(nft_holder).mint(1)
+      console.log("NFTOWNER ", nft_holder)
      await nftFactory.connect(nft_holder2).mint(2)
           await nftFactory.connect(nft_holder3).mint(3)
 

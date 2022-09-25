@@ -32,8 +32,8 @@ contract SimpleNft is ERC721, Ownable {
     constructor() ERC721("SimpleNFT", "sNFT") {
 
         //AND HAVE TO SET THIS SO IT DEPENDS ON THE ID GIVEN
-        setHiddenMetadataUri("https://gateway.pinata.cloud/ipfs/QmdHM2Sq23sbrzijjyownQLTHCjpe59itp9RA1DtpbYQ4i");
-        imageUrls[0]="https://bafkreic7x2ig66xkb2iuqaio5vvlswhtlfjf3z35zs4nmum3x5y62yzdfm.ipfs.nftstorage.link/";
+        setHiddenMetadataUri("");
+        imageUrls[0]="https://bafkreihlnkvmbfbwzoya733vkvdo3inolj4qjzkr4p2mtlcxhcwr4uzvhi.ipfs.nftstorage.link/";
         imageUrls[1]="https://bafkreihdatoafdtbfopzf6zih4qwu76jdufgxhmymdsxk76pmx4kdz7i64.ipfs.nftstorage.link/";
         imageUrls[2]="https://bafkreifuek4nrpl2v64o7hzou2ch5xlgjthzygawr6ix5erw4lsuzt3jxm.ipfs.nftstorage.link/";
         imageUrls[2]="https://bafkreihlnkvmbfbwzoya733vkvdo3inolj4qjzkr4p2mtlcxhcwr4uzvhi.ipfs.nftstorage.link/";
