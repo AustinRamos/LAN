@@ -126,6 +126,7 @@ const [value,setValue] = useState("")
         //also remember to compile and add nft to 
         //and next change metadata uri to show actual nft's!
         console.log("NFTOWNER= ", signer)
+        console.log("PROVIDER: " , provider)
         nft_contract.approve(LAN_ADDRESS,getValues("nftId")).then(()=>{
             console.log("NFT SUCCESFULLY APPROVED, SHOULD BE SENT NOW")
                   //ideally the contract would emit an event bid rejected r bid accepted
