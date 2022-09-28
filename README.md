@@ -1,5 +1,10 @@
 #LAN
 
+LAN project showcase: https://ethglobal.com/showcase/lan-o0r1y
+
+
+
+
 
 
 
