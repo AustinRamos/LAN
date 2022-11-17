@@ -5,6 +5,8 @@ LAN project showcase: https://ethglobal.com/showcase/lan-o0r1y
 
 
 
+** To see demo with example loan/pool listings, switch metamask to Goerli!**
+
 
 
 
