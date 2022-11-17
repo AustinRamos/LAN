@@ -14,9 +14,9 @@ Like a rari pool, admins can create lending pools for certain bluechip nft's. th
 lending pool uses chainlink oracles for bluechip nft's. Dao's can be admin of lending pools and can vote to allow non oracle based bidding as well.
 
 
-![Alt text](../public/auctions.jpg "List of Current Auctions")
+![Alt text](https://github.com/AustinRamos/LAN/blob/main/public/auctions.png "List of Current Auctions")
 
-![Alt text](./public/auction.jpg "Example NFT Auction with bidding.")
+![Alt text](https://github.com/AustinRamos/LAN/blob/main/public/auction.png "Example NFT Auction with bidding.")
 
 
 
