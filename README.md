@@ -7,12 +7,13 @@ LAN project showcase: https://ethglobal.com/showcase/lan-o0r1y
 
 
 
-LAN is a novel NFT lending platform which combaines Peer to Peer and Peer to Pool lending. Borrowers(Owners of NFT's) can create lending auctions for their NFT's. When they create an auction, the NFT is transferred to the contract.Lenders can also bid directly on it according to their own estimated value. If the loan value(loan amount + interest rate over loan period) is better than the existing bid, then the loan is automatically transferred to the new lender. the old lender is credited with their loan amount+ interest accrued to that amount.
+LAN is a novel NFT lending platform which combaines Peer to Peer and Peer to Pool lending. Borrowers(Owners of NFT's) can create lending auctions for their NFT's. When they create an auction, the NFT is transferred to the contract.Lenders can also bid directly on it according to their own estimated value or for 'bluechips' can use oracle. If the loan value(loan amount + interest rate over loan period) is better than the existing bid, then the loan is automatically transferred to the new lender. the old lender is credited with their loan amount+ interest accrued to that amount.
 
 ToDo:
 The core use case would be automatic bidding lending pools which facilitate the 'price discovery' of the loan.
-Like a rari pool, admins can create lending pools for certain bluechip nft's. they will advertise a certain min apr rate the pool generates which defines the lower bound on 
-lending pool uses chainlink oracles for bluechip nft's. Dao's can be admin of lending pools and can vote to allow non oracle based bidding as well.
+Like a rari pool, admins can create lending pools for certain bluechip nft's. they will advertise a certain min apr rate the pool generates which defines the lower bound on.
+lending pool will use oracles for bluechip nft's. Dao's can be admin of lending pools and can vote to allow non oracle based bidding as well.
+Individual lenders can deposit into the bidding pools to capture the min apr. Bidding pool can integrate ERC-4626 vaults, and funds in a bidding pool which are not actively lent out can be deposited into yearn or other sources of yield.
 
 
 ![Alt text](https://github.com/AustinRamos/LAN/blob/main/public/auctions.png "List of Current Auctions")
